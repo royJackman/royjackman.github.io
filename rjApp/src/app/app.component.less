@@ -1,7 +1,8 @@
 :host {
     background-color       : black;
-    font-family            : -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size              : 14px;
+    font-family            : 'Odibee Sans', cursive;
+    font-size              : 24px;
+    letter-spacing         : 0.5px;
     color                  : rgb(255, 255, 255);
     box-sizing             : border-box;
     -webkit-font-smoothing : antialiased;
@@ -136,7 +137,8 @@ a:hover {
 }
 
 a:hover {
-    color: #125699;
+    color           : #2188f0;
+    background-color: #303030;
 }
 
 .terminal {
@@ -230,6 +232,12 @@ footer a {
     margin-right: 4px;
 }
 
+.bigSection {
+    margin          : 20px;
+    background-color: #bd636368;
+    border-radius   : 4px;
+    padding-left: 10px
+}
 
 /* Responsive Styles */
 @media screen and (max-width: 767px) {
@@ -246,17 +254,5 @@ footer a {
 
     .card.highlight-card span {
         margin-left: 72px;
-    }
-
-    svg#rocket-smoke {
-        right    : 120px;
-        transform: rotate(-5deg);
-    }
-}
-
-@media screen and (max-width: 575px) {
-    svg#rocket-smoke {
-        display   : none;
-        visibility: hidden;
     }
 }
