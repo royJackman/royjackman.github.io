@@ -11,12 +11,26 @@
   <p>Some fun interactables to help you see how fucked you are (in America)</p>
   
   <div class="card-container">
-    <a class="card" target="_blank" rel="noopener" href=""><span>Rich Person Contribution Calculator</span></a>
-  
-    <a class="card" target="_blank" rel="noopener" href=""><span>Vote Importance Chart</span></a>
-  
-    <a class="card" target="_blank" rel="noopener" href=""><span>National Checkbook Balancer</span></a>
-  
+    <mat-radio-group
+      aria-labelledby="appOptions"
+      class="appPicker"
+      [(ngModel)]="appId"
+      (click)="appChanged()">
+      <mat-radio-button class="card" [value]="this.appConstants.AppId.RichPersonContributionCalculator">Rich Person Contribution Calculator</mat-radio-button>
+      <mat-radio-button class="card" [value]="this.appConstants.AppId.VoteImportanceChart">Vote Importance Chart</mat-radio-button>
+      <mat-radio-button class="card" [value]="this.appConstants.AppId.NationalCheckbookBalancer">National Checkbook Balancer</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div>
+    <div *ngIf="appId === appConstants.AppId.RichPersonContributionCalculator">
+      <app-wealth-contribution-calculator></app-wealth-contribution-calculator>
+    </div>
+    <div *ngIf="appId === appConstants.AppId.VoteImportanceChart">
+      <app-vote-distribution></app-vote-distribution>
+    </div>
+    <div *ngIf="appId === appConstants.AppId.NationalCheckbookBalancer">
+      <app-national-program-balance></app-national-program-balance>
+    </div>
   </div>
 </div>
 
