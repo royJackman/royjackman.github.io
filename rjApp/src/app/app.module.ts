@@ -4,15 +4,32 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { WealthContributionCalculatorComponent } from './modules/wealth-contribution-calculator/wealth-contribution-calculator.component';
+import { MatRadioModule } from '@angular/material';
+import { AppConstants } from './app.constants';
+import { FormsModule } from '@angular/forms';
+import { VoteDistributionComponent } from './modules/vote-distribution/vote-distribution.component';
+import { NationalProgramBalanceComponent } from './modules/national-program-balance/national-program-balance.component';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    WealthContributionCalculatorComponent,
+    VoteDistributionComponent,
+    NationalProgramBalanceComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatRadioModule,
+    FormsModule
   ],
-  providers: [],
+  exports: [
+    MatRadioModule
+  ],
+  providers: [
+    AppConstants
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
