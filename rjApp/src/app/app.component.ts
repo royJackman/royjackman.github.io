@@ -19,4 +19,8 @@ export class AppComponent implements OnInit {
   appChanged() {
     console.log(this.appId);
   }
+
+  changeId(appId: number) {
+    this.appId = appId;
+  }
 }
