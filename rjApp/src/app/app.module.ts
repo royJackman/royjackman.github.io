@@ -10,6 +10,7 @@ import { AppConstants } from './app.constants';
 import { FormsModule } from '@angular/forms';
 import { VoteDistributionComponent } from './modules/vote-distribution/vote-distribution.component';
 import { NationalProgramBalanceComponent } from './modules/national-program-balance/national-program-balance.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { NationalProgramBalanceComponent } from './modules/national-program-bala
     BrowserModule,
     AppRoutingModule,
     MatRadioModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule
   ],
   exports: [
     MatRadioModule

@@ -9,17 +9,11 @@
 <div class="bigSection">
   <h2>Politics</h2>
   <p>Some fun interactables to help you see how fucked you are (in America)</p>
-  
+
   <div class="card-container">
-    <mat-radio-group
-      aria-labelledby="appOptions"
-      class="appPicker"
-      [(ngModel)]="appId"
-      (click)="appChanged()">
-      <mat-radio-button class="card" [value]="this.appConstants.AppId.RichPersonContributionCalculator">Rich Person Contribution Calculator</mat-radio-button>
-      <mat-radio-button class="card" [value]="this.appConstants.AppId.VoteImportanceChart">Vote Importance Chart</mat-radio-button>
-      <mat-radio-button class="card" [value]="this.appConstants.AppId.NationalCheckbookBalancer">National Checkbook Balancer</mat-radio-button>
-    </mat-radio-group>
+    <div class="card" (click)="changeId(appConstants.AppId.RichPersonContributionCalculator)">Rich Person Contribution Calculator</div>
+    <div class="card" (click)="changeId(appConstants.AppId.VoteImportanceChart)">Vote Importance Chart</div>
+    <div class="card" (click)="changeId(appConstants.AppId.NationalCheckbookBalancer)">National Checkbook Balancer</div>
   </div>
   <div>
     <div *ngIf="appId === appConstants.AppId.RichPersonContributionCalculator">
