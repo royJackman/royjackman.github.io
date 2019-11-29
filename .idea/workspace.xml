@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="de24c02e-4e38-4ae5-8abe-45695d5b18b7" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/personalWebsite.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/app.constants.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rjApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/rjApp/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rjApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/rjApp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rjApp/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/rjApp/src/app/app.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rjApp/src/app/app.component.less" beforeDir="false" afterPath="$PROJECT_DIR$/rjApp/src/app/app.component.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rjApp/src/app/app.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/rjApp/src/app/app.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rjApp/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/rjApp/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rjApp/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/rjApp/src/app/app.module.ts" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="70">
+              <caret line="5" column="41" selection-start-line="5" selection-start-column="41" selection-end-line="5" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rjApp/src/app/app.component.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rjApp/src/app/app.component.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="28">
+              <caret line="2" selection-start-line="2" selection-end-line="2" />
+              <folding>
+                <element signature="e#0#48#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>WealthContributionCalculatorComponent</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/rjApp/src/app/app.constants.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/app.component.less" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/wealth-contribution-calculator.module.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.module.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.service.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.service.spec.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/wealth-contribution-calculator/wealth-contribution-calculator.component.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.html" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/wealth-contribution-calculator.module.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/wealth-contribution-calculator.component.html" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/wealth-contribution-calculator.component.spec.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/wealth-contribution-calculator.component.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/app.module.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/wealth-contribution-calculator.service.spec.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/wealth-contribution-calculator.service.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.service.spec.ts" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/app.component.html" />
+        <option value="$PROJECT_DIR$/rjApp/src/app/app.component.ts" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="23" />
+    <option name="width" value="974" />
+    <option name="height" value="963" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="personalWebsite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="personalWebsite" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="personalWebsite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="personalWebsite" type="462c0819:PsiDirectoryNode" />
+              <item name="rjApp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="personalWebsite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="personalWebsite" type="462c0819:PsiDirectoryNode" />
+              <item name="rjApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="personalWebsite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="personalWebsite" type="462c0819:PsiDirectoryNode" />
+              <item name="rjApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="personalWebsite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="personalWebsite" type="462c0819:PsiDirectoryNode" />
+              <item name="rjApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="personalWebsite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="personalWebsite" type="462c0819:PsiDirectoryNode" />
+              <item name="rjApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="national-program-balance" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="personalWebsite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="personalWebsite" type="462c0819:PsiDirectoryNode" />
+              <item name="rjApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="vote-distribution" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="personalWebsite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="personalWebsite" type="462c0819:PsiDirectoryNode" />
+              <item name="rjApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="wealth-contribution-calculator" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="editor.config.ad.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/rjApp/src/app/modules" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/rjApp/node_modules/typescript/lib" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/rjApp/src/app/modules" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/rjApp/src/app/modules" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="de24c02e-4e38-4ae5-8abe-45695d5b18b7" name="Default Changelist" comment="" />
+      <created>1574959961102</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1574959961102</updated>
+      <workItem from="1574959962832" duration="10769000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="10769000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1680" height="963" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Designer" />
+      <window_info id="Image Layers" />
+      <window_info id="DB Browser" />
+      <window_info id="UI Designer" />
+      <window_info id="Project Explorer" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info id="Capture Tool" />
+      <window_info id="Job Explorer" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32967034" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="DB Execution Console" />
+      <window_info anchor="bottom" id="TypeScript" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Console" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Maven" />
+      <window_info anchor="right" id="Palette" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$USER_HOME$/src/platform/utest-platform-view/src/platform-web/app/modules/tester-payments/tester-payments.constants.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/app.constants.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="56">
+          <caret line="4" column="2" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/node_modules/@angular/material/radio/typings/radio.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-507">
+          <caret line="142" column="21" selection-start-line="142" selection-start-column="21" selection-end-line="142" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/app.component.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="473">
+          <caret line="235" column="1" selection-start-line="235" selection-start-column="1" selection-end-line="235" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/wealth-contribution-calculator/wealth-contribution-calculator.component.less">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/wealth-contribution-calculator/wealth-contribution-calculator.component.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.less">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/wealth-contribution-calculator/wealth-contribution-calculator.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="20" selection-start-column="20" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="27" selection-start-column="27" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.less">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/app.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="16" column="69" selection-start-line="16" selection-start-column="69" selection-end-line="16" selection-end-column="69" />
+          <folding>
+            <element signature="e#0#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/wealth-contribution-calculator/wealth-contribution-calculator.component.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="5" column="29" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.service.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/wealth-contribution-calculator/wealth-contribution-calculator.service.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/wealth-contribution-calculator/wealth-contribution-calculator.service.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.service.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="56">
+          <caret line="4" column="32" selection-start-line="4" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/wealth-contribution-calculator/wealth-contribution-calculator.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/vote-distribution/vote-distribution.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="7" column="16" lean-forward="true" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/modules/national-program-balance/national-program-balance.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="5" column="41" selection-start-line="5" selection-start-column="41" selection-end-line="5" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/app.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rjApp/src/app/app.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="28">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

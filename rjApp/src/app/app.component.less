@@ -1,7 +1,8 @@
 :host {
     background-color       : black;
-    font-family            : -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size              : 14px;
+    font-family            : 'Odibee Sans', cursive;
+    font-size              : 24px;
+    letter-spacing         : 0.5px;
     color                  : rgb(255, 255, 255);
     box-sizing             : border-box;
     -webkit-font-smoothing : antialiased;
@@ -65,10 +66,6 @@ p {
     align-items   : center;
 }
 
-.card svg.material-icons path {
-    fill: #888;
-}
-
 .card-container {
     display        : flex;
     flex-wrap      : wrap;
@@ -78,14 +75,14 @@ p {
 
 .card {
     border-radius   : 4px;
-    border          : 1px solid #eee;
+    border          : 1px solid #be000b;
     background-color: #000000;
     height          : 40px;
-    width           : 200px;
+    width           : 300px;
     margin          : 0 8px 16px;
     padding         : 16px;
     display         : flex;
-    flex-direction  : row;
+    //flex-direction  : row;
     justify-content : center;
     align-items     : center;
     transition      : all 0.2s ease-in-out;
@@ -128,15 +125,16 @@ p {
     margin-left: 60px;
 }
 
-a,
-a:visited,
-a:hover {
+mat-radio-button,
+mat-radio-button:visited,
+mat-radio-button:hover {
     color          : #1976d2;
     text-decoration: none;
 }
 
-a:hover {
-    color: #125699;
+mat-radio-button:hover {
+    color           : #2188f0;
+    background-color: #303030;
 }
 
 .terminal {
@@ -230,6 +228,12 @@ footer a {
     margin-right: 4px;
 }
 
+.bigSection {
+    margin          : 20px;
+    background-color: #bd636368;
+    border-radius   : 4px;
+    padding-left    : 10px
+}
 
 /* Responsive Styles */
 @media screen and (max-width: 767px) {
@@ -246,17 +250,5 @@ footer a {
 
     .card.highlight-card span {
         margin-left: 72px;
-    }
-
-    svg#rocket-smoke {
-        right    : 120px;
-        transform: rotate(-5deg);
-    }
-}
-
-@media screen and (max-width: 575px) {
-    svg#rocket-smoke {
-        display   : none;
-        visibility: hidden;
     }
 }
