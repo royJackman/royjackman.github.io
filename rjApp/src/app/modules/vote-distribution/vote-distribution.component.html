@@ -1,1 +1,5 @@
-<p>vote-distribution works!</p>
+<div class="card-container">
+  <div class="card card-small" (click)="this.generateValues(this.voteDistributionConstants.CalculationType.electoralCollege.id)">Electoral College</div>
+  <div class="card card-small" (click)="this.generateValues(this.voteDistributionConstants.CalculationType.population.id)">Population</div>
+</div>
+<div id="chartdiv"></div>
