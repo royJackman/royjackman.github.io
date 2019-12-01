@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { VoteDistributionComponent } from './modules/vote-distribution/vote-distribution.component';
 import { NationalProgramBalanceComponent } from './modules/national-program-balance/national-program-balance.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { VoteDistributionConstants } from './modules/vote-distribution/vote-distribution.constants';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatRadioModule
   ],
   providers: [
-    AppConstants
+    AppConstants,
+    VoteDistributionConstants
   ],
   bootstrap: [AppComponent]
 })

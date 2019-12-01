@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {AppConstants} from './app.constants';
+import { Component, OnInit } from '@angular/core';
+import { AppConstants } from './app.constants';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title = 'rjApp';
   appId: number;
 
-  constructor(private appConstants: AppConstants) {}
+  constructor(public appConstants: AppConstants) {}
 
   ngOnInit() {
     console.log('Great Success;');
