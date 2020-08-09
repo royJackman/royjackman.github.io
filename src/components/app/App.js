@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           This page is <strong>under construction!</strong> Please come back later, thank you!
@@ -18,7 +18,7 @@ function App() {
         >
           My Github
         </a>
-      </header>
+      </div>
     </div>
   );
 }

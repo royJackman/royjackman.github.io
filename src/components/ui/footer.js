@@ -2,6 +2,7 @@ import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import {FaGithub, FaLinkedin} from 'react-icons/fa';
 import {GrMail} from 'react-icons/gr';
+import './ui.css';
 
 const Footer = () => {
     return (
