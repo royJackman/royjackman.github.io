@@ -4,7 +4,7 @@ import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import './index.css';
 import App from './components/app/App';
 import * as serviceWorker from './serviceWorker';
-import Footer from './components/footer/footer';
+import Footer from './components/ui/footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = (

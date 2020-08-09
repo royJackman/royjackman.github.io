@@ -12,6 +12,18 @@ code {
     monospace;
 }
 
+footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.justified {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
 .primary-color {
   background-color: #3949ab;
 }
@@ -36,3 +48,6 @@ code {
   background-color: #005b9f;
 }
 
+.white-text {
+  color: white;
+}
