@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import './index.css';
 import App from './components/app/App';
+import Resume from './components/resume/Resume';
 import * as serviceWorker from './serviceWorker';
 import Header from './components/ui/header';
 import Footer from './components/ui/footer';
@@ -14,6 +15,7 @@ const router = (
     <div className="switch">
       <Switch>
         <Route exact path='/' component={App} />
+        <Route exact path='/resume' component={Resume} />
       </Switch>
     </div>
     <Footer />
