@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSpring, animated} from 'react-spring';
-import {Container, Col, Row} from 'react-bootstrap';
+import {Container, Col, Row, Image} from 'react-bootstrap';
 import './resume.css';
 
 const calc = (x, y, title) => {
@@ -18,7 +18,7 @@ function resumeItem(title, position, bullets, startDate, endDate, logo, tools) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [props, set] = useSpring(() => ({ xys: [0,0,1], config: { mass: 5, tension: 350, friction: 40} }));
     return (
-        <li className="list-unstyled">
+        <li className="list-unstyled padding-15">
             <animated.div 
                 id={title}
                 className="card padding-15"
@@ -30,7 +30,7 @@ function resumeItem(title, position, bullets, startDate, endDate, logo, tools) {
                 }}>
                     <Container>
                         <Row xs>
-                            <Col md={2}>{logo}</Col>
+                            <Col md={3}>{logo}</Col>
                             <Col md="auto">
                                 <Row><h3 className="title">{title}</h3></Row>
                                 <Row><h5>{position}</h5></Row>
@@ -54,7 +54,7 @@ function resumeItem(title, position, bullets, startDate, endDate, logo, tools) {
                         <Row fluid>
                             <Col />
                             <Row md="auto">
-                            {tools.map((l) => <div style={{margin: 10+'px'}}>{l}</div>)}
+                            {tools.map((t) => <div style={{margin: 10+'px'}}><Image src={t} height="50"/></div>)}
                             </Row>
                             <Col />
                         </Row>
