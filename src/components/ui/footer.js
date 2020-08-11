@@ -6,11 +6,11 @@ import './ui.css';
 
 const Footer = () => {
     return (
-        <footer>
+        <div className="footer">
             <Container fluid className="primary-color white-text">
                 <Row>
                     <Col />
-                    <Col md={4}>
+                    <Col md={5}>
                         <h5 className="title">The Riddle Section</h5>
                         <p className="justified">If a crab and a half weigh a pound and a half, and the half crab weighs as much again as the whole crab, how much does half the whole crab and the whole of the half crab weigh?</p>
                     </Col>
@@ -30,7 +30,7 @@ const Footer = () => {
                     <Col />
                 </Row>
             </Container>
-        </footer>
+        </div>
     )
 }
 

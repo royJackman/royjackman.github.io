@@ -8,7 +8,7 @@ const calc = (x, y, title) => {
     return [
         -5 * (y - bounds.y - (bounds.height/2))/bounds.height, 
         5 * (x - bounds.x - (bounds.width/2))/bounds.width, 
-        1.1
+        1.02
     ];
 } 
 const trans = (x, y, s) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;

@@ -1,15 +1,15 @@
 import React from 'react';
-import {Container, Row, Col, Button} from 'react-bootstrap';
+import {Container, Row, Col, Button, Image} from 'react-bootstrap';
 import './ui.css';
 import logo from '../../svg/crow.svg';
 
 const Header = () => {
     return (
         <div>
-            <Container fluid className="primary-color">
+            <Container fluid className="header primary-color">
                 <Row>
                     <Col sm={1}>
-                        <a href="/"><img src={logo} alt="logo"/></a>
+                        <a href="/"><Image src={logo} alt="logo" height="75"/></a>
                     </Col>
                     <Col />
                     <Col md="auto" className="center-text">
