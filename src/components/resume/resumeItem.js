@@ -31,7 +31,7 @@ function resumeItem(title, position, bullets, startDate, endDate, logo, tools) {
                     <Container>
                         <Row xs>
                             <Col md={3}>{logo}</Col>
-                            <Col md="auto">
+                            <Col md={5}>
                                 <Row><h3 className="title">{title}</h3></Row>
                                 <Row><h5>{position}</h5></Row>
                             </Col>
@@ -39,11 +39,11 @@ function resumeItem(title, position, bullets, startDate, endDate, logo, tools) {
                             <Col md="auto"><h5>
                                 {new Intl.DateTimeFormat("en-GB", {
                                     year: "numeric",
-                                    month: "long"
+                                    month: "short"
                                 }).format(startDate)} - 
                                 {new Intl.DateTimeFormat("en-GB", {
                                     year: "numeric",
-                                    month: "long"
+                                    month: "short"
                                 }).format(endDate)}
                             </h5></Col>
                         </Row>
