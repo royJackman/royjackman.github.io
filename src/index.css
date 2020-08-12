@@ -52,3 +52,8 @@ code {
 .text-light {
   color: #daad86;
 }
+
+.vertically-center-contents {
+  display: flex;
+  align-items: center;
+}
