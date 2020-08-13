@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useSpring, animated} from 'react-spring';
 import {Container, Col, Row, Image} from 'react-bootstrap';
 import './resume.css';
 
-const calc = (x, y, title) => {
+const calc = (x, y, title, stable=false) => {
+    if(stable) { return [0,0,1.02]; }
     const card = document.getElementById(title);
     const bounds = card.getBoundingClientRect();
     return [
@@ -16,13 +17,21 @@ const trans = (x, y, s) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg)
 
 function ResumeItem(itemId, title, position, bullets, startDate, endDate, logo, tools, itemColor) {
     const [props, set] = useSpring(() => ({ xys: [0,0,1], config: { mass: 5, tension: 350, friction: 40} }));
+    const [stable, setStable] = useState(false);
     return (
         <li className="list-unstyled padding-15">
             <animated.div 
                 id={itemId}
                 className="card padding-15"
-                onMouseMove={({clientX: x, clientY: y}) => set({ xys: calc(x, y, itemId)})}
-                onMouseLeave={() => set({ xys: [0,0,1] })}
+                onMouseMove={({clientX: x, clientY: y}) => set({ xys: calc(x, y, itemId, stable)})}
+                onMouseUp={({clientX: x, clientY: y}) => {
+                    set({ xys: calc(x, y, itemId, !stable)});
+                    setStable(!stable);
+                }}
+                onMouseLeave={() => {
+                    set({ xys: [0,0,1] });
+                    setStable(false);
+                }}
                 style={{
                     backgroundColor: itemColor,
                     transform: props.xys.interpolate(trans)
