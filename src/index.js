@@ -5,8 +5,8 @@ import './index.css';
 import App from './components/app/App';
 import Resume from './components/resume/Resume';
 import * as serviceWorker from './serviceWorker';
-import Header from './components/ui/header';
-import Footer from './components/ui/footer';
+import Header from './components/ui/Header';
+import Footer from './components/ui/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = (

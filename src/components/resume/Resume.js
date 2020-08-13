@@ -1,6 +1,6 @@
 import React from 'react';
 import {Container, Col, Row, Image} from 'react-bootstrap';
-import resumeItem from './resumeItem';
+import ResumeItem from './ResumeItem';
 
 function Resume() {
     return (
@@ -9,7 +9,7 @@ function Resume() {
                 <Col />
                 <Col md={13}>
                     <ul>
-                        {new resumeItem(
+                        {new ResumeItem(
                             "mscs",
                             "University of Massachusetts at Amherst",
                             "Masters of Science in Computer Science focusing on Machine Learning and Artificial Intelligence",
@@ -48,7 +48,7 @@ function Resume() {
                             ],
                             "#f8d197"
                         )}
-                        {new resumeItem(
+                        {new ResumeItem(
                             "aaq",
                             "Applause App Quality", 
                             "Full Stack Software Engineer",
@@ -79,7 +79,7 @@ function Resume() {
                             ],
                             '#f8e297'
                         )}
-                        {new resumeItem(
+                        {new ResumeItem(
                             "binds",
                             "Biologically Inspired Neural and Dynamical Systems Laboratory",
                             "Research Assistant",
@@ -110,7 +110,7 @@ function Resume() {
                             ],
                             '#f8e297'
                         )}
-                        {new resumeItem(
+                        {new ResumeItem(
                             "bscs",
                             "University of Massachusetts at Amherst",
                             "Bachelors of Science in Computer Science focusing on Machine Learning and Artificial Intelligence",
@@ -148,7 +148,7 @@ function Resume() {
                             ],
                             "#f8d197"
                         )}
-                        {new resumeItem(
+                        {new ResumeItem(
                             "bsm",
                             "University of Massachusetts at Amherst",
                             "Bachelors of Science in Mathematics focusing on Applied Mathematics",
@@ -175,7 +175,7 @@ function Resume() {
                             ],
                             "#f8d197"
                         )}
-                        {new resumeItem(
+                        {new ResumeItem(
                             "ml",
                             "University of Massachusetts at Amherst",
                             "Minor of Linguistics",
@@ -195,7 +195,7 @@ function Resume() {
                             [],
                             "#f8d197"
                         )}
-                        {new resumeItem(
+                        {new ResumeItem(
                             "tb",
                             "Twist Bioscience",
                             "Software Development Intern",
@@ -225,7 +225,7 @@ function Resume() {
                             ],
                             '#f8e297'
                         )}
-                        {new resumeItem(
+                        {new ResumeItem(
                             "bgu",
                             "Plant Lipid Biotechnology Lab at Ben Gurion University",
                             "Research Assistant",
@@ -247,7 +247,7 @@ function Resume() {
                             ],
                             '#f8e297'
                         )}
-                        {new resumeItem(
+                        {new ResumeItem(
                             "vyx",
                             "Variantyx Inc.",
                             "Software Development Intern",

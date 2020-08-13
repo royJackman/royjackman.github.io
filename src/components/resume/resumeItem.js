@@ -14,8 +14,7 @@ const calc = (x, y, title) => {
 } 
 const trans = (x, y, s) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
-function resumeItem(itemId, title, position, bullets, startDate, endDate, logo, tools, itemColor) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+function ResumeItem(itemId, title, position, bullets, startDate, endDate, logo, tools, itemColor) {
     const [props, set] = useSpring(() => ({ xys: [0,0,1], config: { mass: 5, tension: 350, friction: 40} }));
     return (
         <li className="list-unstyled padding-15">
@@ -65,4 +64,4 @@ function resumeItem(itemId, title, position, bullets, startDate, endDate, logo, 
     )
 }
 
-export default resumeItem;
+export default ResumeItem;
