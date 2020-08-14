@@ -4,6 +4,8 @@ import { PYTHON_SVG, NUMPY_SVG, TENSORFLOW_SVG, PYTORCH_SVG, SKLEARN_SVG, CPP_SV
 import ResumeItem from './ResumeItem';
 
 export const CHRON = ['mscs','aaq','binds','bscs','bsm','ml','tb','bgu','vyx'];
+export const WORK = ['aaq','binds','tb','bgu','vyx','mscs','bscs','bsm','ml'];
+export const EDU = ['mscs','bscs','bsm','ml','aaq','binds','tb','bgu','vyx'];
 
 const items = {
     aaq: {
