@@ -1,14 +1,9 @@
 import React, {useState} from 'react';
-import {Container, Col, Row} from 'react-bootstrap';
+import {Container, Col, Row, DropdownButton, Dropdown} from 'react-bootstrap';
 import Slider from '@material-ui/core/Slider';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
 import {ResponsiveSankey} from '@nivo/sankey';
 
 const generateData = (layers, width) => {
-    console.log(layers, width);
     var data = { "nodes": [], "links": [] };
     var randomColor = require('randomcolor');
     for (var i = 0; i < layers; i++) {
@@ -36,6 +31,7 @@ function NNWidget() {
     const [layers, setLayers] = useState(3);
     const [width, setWidth] = useState(5);
     const [acti, setActi] = useState("relu");
+    const [actiName, setActiName] = useState("ReLU");
 
     const [data, setData] = useState(generateData(layers, width));
 
@@ -71,22 +67,23 @@ function NNWidget() {
                                 setData(generateData(layers, width));
                             }} />
                         <h5>Activation Function</h5>
-                        <FormControl>
-                            <RadioGroup 
-                                value={acti} 
-                                onChange={(e) => setActi(e.target.value)}
-                                style={{margin: "0px"}}>
-                                <FormControlLabel control={<Radio />} value="relu" label="ReLU" defaultChecked/>
-                                <FormControlLabel control={<Radio />} value="sigmoid" label="Sigmoid" />
-                                <FormControlLabel control={<Radio />} value="softmax" label="SoftMax" />
-                                <FormControlLabel control={<Radio />} value="softplus" label="Softplus" />
-                                <FormControlLabel control={<Radio />} value="softsign" label="Softsign" />
-                                <FormControlLabel control={<Radio />} value="tanh" label="Tanh" />
-                                <FormControlLabel control={<Radio />} value="selu" label="SeLU" />
-                                <FormControlLabel control={<Radio />} value="elu" label="ELU" />
-                                <FormControlLabel control={<Radio />} value="exponential" label="Exponential" />
-                            </RadioGroup>
-                        </FormControl>
+                        <DropdownButton 
+                            id="acti" 
+                            title={actiName}
+                            onSelect={(_ek, e) => {
+                                setActi(e.target.value);
+                                setActiName(e.target.innerHTML);
+                            }}>
+                            <Dropdown.Item as="button" value="relu">ReLU</Dropdown.Item>                            
+                            <Dropdown.Item as="button" value="sigmoid">Sigmoid</Dropdown.Item>
+                            <Dropdown.Item as="button" value="softmax">SoftMax</Dropdown.Item>
+                            <Dropdown.Item as="button" value="softplus">Softplus</Dropdown.Item>
+                            <Dropdown.Item as="button" value="softsign">Softsign</Dropdown.Item>
+                            <Dropdown.Item as="button" value="tanh">Tanh</Dropdown.Item>
+                            <Dropdown.Item as="button" value="selu">SeLU</Dropdown.Item>
+                            <Dropdown.Item as="button" value="elu">ELU</Dropdown.Item>
+                            <Dropdown.Item as="button" value="exponential">Exponential</Dropdown.Item>
+                        </DropdownButton>
                     </Col>
                     <Col />
                     <Col md={8}>
