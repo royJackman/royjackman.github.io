@@ -5,13 +5,11 @@ import {ResponsiveSankey} from '@nivo/sankey';
 
 const generateData = (layers, width) => {
     var data = { "nodes": [], "links": [] };
-    var randomColor = require('randomcolor');
     for (var i = 0; i < layers; i++) {
         for (var j = 0; j < width; j++) {
             var tempName = "node-" + i + "-" + j;
             data.nodes.push({
                 id: tempName,
-                color: randomColor()
             });
             if (i !== layers-1) {
                 for (var k=0; k < width; k++) {
