@@ -11,7 +11,7 @@ function bezierLink(x0, y0, x1, y1, width) {
                 id={[x0,y0,x1,y1].join("_")}
                 key={[x0,y0,x1,y1].join("_")}
                 fill="none"
-                strokeWidth={width * 3}
+                strokeWidth={Math.abs(width * 3)}
                 stroke="red" />);
 }
 
@@ -33,42 +33,32 @@ function NNGraph(weightResponse) {
         cy={circlePosn(i, layerWidth)} 
         r={9} />)
     }
+    
+    const getNode = (nodeKey) => circles.filter((val) => nodeKey.localeCompare(val.key) === 0)[0];
 
     for (var i = 0; i < layers; i++) {
         const layerWidth = weights[i * 2].shape[1];
+        const layerWeights = weights[i * 2].arraySync();
         const cx = circlePosn((i+1), layers + 1);
         for (var j = 0; j < layerWidth; j++) {
+            const cy = circlePosn(j, layerWidth);
             circles.push(<circle 
                 id={"bias_" + (i+1) + "_" + j} 
                 key={"bias_" + (i+1) + "_" + j} 
                 cx={cx} 
-                cy={circlePosn(j, layerWidth) + 13} 
+                cy={cy + 13} 
                 r={7}
                 fill="gray" />)
             circles.push(<circle 
                 id={"node_" + (i+1) + "_" + j} 
                 key={"node_" + (i+1) + "_" + j} 
                 cx={cx} 
-                cy={circlePosn(j, layerWidth)} 
+                cy={cy} 
                 r={9} />)
-        }
-    }
-    const getNode = (nodeKey) => circles.filter((val) => nodeKey.localeCompare(val.key) === 0)[0];
-
-    for (var i = 0; i < layers; i++) {
-        const layerWidth = weights[i * 2].shape[1];
-        const layerWeights = weights[i * 2].arraySync();
-        const biasWeights = weights[i * 2 + 1].arraySync();
-
-        for (var j = 0; j < layerWidth; j++) {
-            const dest = getNode("node_"+(i+1)+"_"+j)
-            const [x1, y1] = [dest.props.cx, dest.props.cy];
             for (var k = 0; k < weights[i * 2].shape[0]; k++) {
                 const source = getNode("node_"+i+"_"+k);
-                lines.push(bezierLink(source.props.cx, source.props.cy, x1, y1, layerWeights[k][j]));
+                lines.push(bezierLink(source.props.cx, source.props.cy, cx, cy, layerWeights[k][j]));
             }
-            const source = getNode("bias_"+(i+1)+"_"+j);
-            lines.push(bezierLink(source.props.cx, source.props.cy, x1, y1, biasWeights[j]));
         }
     }
 

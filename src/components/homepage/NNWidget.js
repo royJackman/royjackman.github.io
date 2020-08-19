@@ -79,7 +79,6 @@ function NNWidget() {
                             <Dropdown.Item as="button" value="tanh">Tanh</Dropdown.Item>
                             <Dropdown.Item as="button" value="selu">SeLU</Dropdown.Item>
                             <Dropdown.Item as="button" value="elu">ELU</Dropdown.Item>
-                            <Dropdown.Item as="button" value="exponential">Exponential</Dropdown.Item>
                         </DropdownButton>
                     </Col>
                     <Col />
