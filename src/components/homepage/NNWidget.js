@@ -46,7 +46,7 @@ function NNWidget() {
                         <Slider
                             step={1}
                             min={2}
-                            max={8}
+                            max={6}
                             value={layers}
                             onChange={(_e, v) => {
                                 setLayers(v);
@@ -56,7 +56,7 @@ function NNWidget() {
                         <Slider
                             step={1}
                             min={2}
-                            max={8}
+                            max={6}
                             value={width}
                             onChange={(_e, v) => {
                                 setWidth(v);
