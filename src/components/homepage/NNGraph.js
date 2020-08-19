@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as d3 from 'd3';
+import chroma from 'chroma-js';
 
-function bezierLink(x0, y0, x1, y1, width) {
+const weightColorScale = chroma.scale(["red", "blue"]).mode("lrgb");
+
+function bezierLink(x0, y0, x1, y1, weight, color) {
     var path = d3.path();
     const midX = (x0 + x1)/2;
     path.moveTo(x0, y0);
@@ -11,13 +14,16 @@ function bezierLink(x0, y0, x1, y1, width) {
                 id={[x0,y0,x1,y1].join("_")}
                 key={[x0,y0,x1,y1].join("_")}
                 fill="none"
-                strokeWidth={Math.abs(width * 3)}
-                stroke="red" />);
+                strokeWidth={Math.abs(weight * 4)}
+                stroke={weightColorScale(color)} />);
 }
 
 function NNGraph(weightResponse) {
     const weights = weightResponse.weights;
     const layers = weights.length / 2;
+    const [maxWeight, setMaxWeight] = useState(0.001);
+    const [minWeight, setMinWeight] = useState(-0.001);
+    const getRatio = (val) => (val - minWeight)/(maxWeight - minWeight);
 
     const circlePosn = (index, infoLayers) => (index + 0.5) * 240/infoLayers;
 
@@ -36,10 +42,16 @@ function NNGraph(weightResponse) {
     
     const getNode = (nodeKey) => circles.filter((val) => nodeKey.localeCompare(val.key) === 0)[0];
 
-    for (var i = 0; i < layers; i++) {
+    for (i = 0; i < layers; i++) {
         const layerWidth = weights[i * 2].shape[1];
         const layerWeights = weights[i * 2].arraySync();
         const cx = circlePosn((i+1), layers + 1);
+
+        var max = Math.max(...[].concat(...layerWeights));
+        if (max > maxWeight) { setMaxWeight(max)}
+        var min = Math.min(...[].concat(...layerWeights));
+        if (min > minWeight) { setMinWeight(min)}
+
         for (var j = 0; j < layerWidth; j++) {
             const cy = circlePosn(j, layerWidth);
             circles.push(<circle 
@@ -57,7 +69,7 @@ function NNGraph(weightResponse) {
                 r={9} />)
             for (var k = 0; k < weights[i * 2].shape[0]; k++) {
                 const source = getNode("node_"+i+"_"+k);
-                lines.push(bezierLink(source.props.cx, source.props.cy, cx, cy, layerWeights[k][j]));
+                lines.push(bezierLink(source.props.cx, source.props.cy, cx, cy, layerWeights[k][j], getRatio(layerWeights[k][j])));
             }
         }
     }
