@@ -4,30 +4,29 @@ import Slider from '@material-ui/core/Slider';
 import NNGraph from './NNGraph';
 import * as tf from '@tensorflow/tfjs';
 
-function createModel(layers, width, activation, inputSize, outputSize) {
+function createModel(layerData, activation, inputSize, outputSize) {
     const model = tf.sequential();
-    model.add(tf.layers.dense({inputShape: [inputSize], units: width, activation: activation}));
-    for (var i = 1; i < layers; i++) {
-        model.add(tf.layers.dense({inputShape: [width], units: width, activation: activation}));
+    model.add(tf.layers.dense({inputShape: [inputSize], units: layerData[0], activation: activation}));
+    for (var i = 0; i < layerData.length - 1; i++) {
+        model.add(tf.layers.dense({inputShape: [layerData[i]], units: layerData[i+1], activation: activation}));
     }
-    model.add(tf.layers.dense({inputShape: [width], units: outputSize, activation: activation}));
+    model.add(tf.layers.dense({inputShape: [layerData[layerData.length - 1]], units: outputSize, activation: activation}));
     model.compile({optimizer: 'sgd', loss: 'meanSquaredError'});
     return model;
 }
 
 function NNWidget() {
-    const [layers, setLayers] = useState(3);
-    const [width, setWidth] = useState(3);
+    const [layerData, setLayerData] = useState(Array(3).fill(3));
     const [inputSize, setInputSize] = useState(2);
     const [outputSize, setOutputSize] = useState(1);
     const [acti, setActi] = useState("relu");
     const [actiName, setActiName] = useState("ReLU");
 
-    const [neuralNetwork, setNeuralNetwork] = useState(createModel(layers, width, acti, inputSize, outputSize));
+    const [neuralNetwork, setNeuralNetwork] = useState(createModel(layerData, acti, inputSize, outputSize));
     const [weights, setWeights] = useState(neuralNetwork.getWeights());
 
     const rebuildModel = () => {
-        setNeuralNetwork(createModel(layers, width, acti, inputSize, outputSize));
+        setNeuralNetwork(createModel(layerData, acti, inputSize, outputSize));
         setWeights(neuralNetwork.getWeights());
     };
 
@@ -42,26 +41,63 @@ function NNWidget() {
             <Col>
                 <Row style={{minHeight: "50vh"}}>
                     <Col md="auto">
-                        <h5>Layers</h5>
+                        <h5>Input Size</h5>
                         <Slider
                             step={1}
-                            min={2}
+                            min={1}
                             max={6}
-                            value={layers}
+                            marks={true}
+                            value={inputSize}
                             onChange={(_e, v) => {
-                                setLayers(v);
+                                setInputSize(v);
                                 rebuildModel();
                             }} />
-                        <h5>Width</h5>
+                        <h5>Output Size</h5>
                         <Slider
                             step={1}
-                            min={2}
+                            min={1}
                             max={6}
-                            value={width}
+                            marks={true}
+                            value={outputSize}
                             onChange={(_e, v) => {
-                                setWidth(v);
+                                setOutputSize(v);
                                 rebuildModel();
                             }} />
+                        <hr />
+                        <h5>Hidden Layers</h5>
+                        <Slider
+                            step={1}
+                            min={1}
+                            max={6}
+                            marks={true}
+                            value={layerData.length}
+                            onChange={(_e, v) => {
+                                let layers = layerData.length;
+                                if (v > layers) {
+                                    layerData.push(3);
+                                } else if(v < layers) {
+                                    layerData.pop();
+                                }
+                                rebuildModel();
+                            }} />
+                        <h5>Layer Width</h5>
+                        {layerData.map((val, i) => {
+                            return <span key={"s"+i}><h5 key={"l"+i}>Layer {i+1}</h5><Slider
+                                id={i}
+                                key={i}
+                                step={1}
+                                min={2}
+                                max={6}
+                                marks={true}
+                                value={layerData[i]}
+                                onChange={(_e, v) => {
+                                    let newLD = Object.assign([], layerData);
+                                    newLD[i] = v;
+                                    setLayerData(newLD);
+                                    rebuildModel();
+                                }} /></span>
+                        })}
+                        <hr />
                         <h5>Activation Function</h5>
                         <DropdownButton 
                             id="acti" 
