@@ -3,6 +3,10 @@ import {Accordion, Container, Col, Row, DropdownButton, Dropdown} from 'react-bo
 import Slider from '@material-ui/core/Slider';
 import NNGraph from './NNGraph';
 import * as tf from '@tensorflow/tfjs';
+import {Spring} from 'react-spring/renderprops';
+
+const PLAY_BUTTON = 'm 35 50 l 0 -26 l 45 26 l -45 26 l 0 -26 z';
+const STOP_BUTTON = 'm 75 75 l -50 0 l 0 -50 l 50 0 l 0 50 z';
 
 function createModel(layerData, activation, inputSize, outputSize, loss, optimizer) {
     const model = tf.sequential();
@@ -28,7 +32,8 @@ class NNWidget extends React.Component {
             optiName: "Stochastic Gradient Descent",
             inputSize: 2,
             outputSize: 1,
-            layerData: Array(3).fill(3)
+            layerData: Array(3).fill(3),
+            playing: false
         }
 
         this.state.neuralNetwork = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
@@ -38,7 +43,9 @@ class NNWidget extends React.Component {
     rebuildModel() {
         this.setState({neuralNetwork: createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)});
         this.setState({weights: this.state.neuralNetwork.getWeights()});
-    };
+    }
+
+    togglePlay() { this.setState({ playing: !this.state.playing }) }
 
     render() {
         return (
@@ -178,6 +185,27 @@ class NNWidget extends React.Component {
                         <Col />
                         <Col md={8}>
                             <NNGraph weights={this.state.weights}/>
+                            <Row>
+                                <Col />
+                                <Col>
+                                    <Spring
+                                        from={{ color: "#03C04A" }}
+                                        to={{
+                                            shape: this.state.playing ? STOP_BUTTON : PLAY_BUTTON,
+                                            color: this.state.playing ? "#D21404" : "#03C04A"
+                                        }}>
+                                            {({shape, color, ...rest}) => {
+                                                return (<svg viewBox="0 0 100 100" style={{maxHeight: "10vh"}}>
+                                                    <circle fill={color} cx="50" cy="50" r="50"/>
+                                                    <g onClick={() => this.togglePlay()}>
+                                                        <path fill="white" d={shape} />
+                                                    </g>
+                                                </svg>);
+                                            }}
+                                        </Spring>
+                                </Col>
+                                <Col />
+                            </Row>
                         </Col>
                     </Row>
                 </Col>
