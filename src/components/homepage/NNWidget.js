@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Accordion, Container, Col, Row, DropdownButton, Dropdown} from 'react-bootstrap';
 import Slider from '@material-ui/core/Slider';
 import NNGraph from './NNGraph';
@@ -15,169 +15,175 @@ function createModel(layerData, activation, inputSize, outputSize, loss, optimiz
     return model;
 }
 
-function NNWidget() {
-    const [layerData, setLayerData] = useState(Array(3).fill(3));
-    const [inputSize, setInputSize] = useState(2);
-    const [outputSize, setOutputSize] = useState(1);
-    const [acti, setActi] = useState("relu");
-    const [actiName, setActiName] = useState("ReLU");
-    const [loss, setLoss] = useState("meanSquaredError");
-    const [lossName, setLossName] = useState("Mean Squared Error");
-    const [opti, setOpti] = useState("sgd");
-    const [optiName, setOptiName] = useState("Stochastic Gradient Descent");
+class NNWidget extends React.Component {
+    constructor(props) {
+        super(props);
 
-    const [neuralNetwork, setNeuralNetwork] = useState(createModel(layerData, acti, inputSize, outputSize, loss, opti));
-    const [weights, setWeights] = useState(neuralNetwork.getWeights());
+        this.state = {
+            acti: "relu",
+            actiName: "ReLU",
+            loss: "meanSquaredError",
+            lossName: "Mean Squared Error",
+            opti: "sgd",
+            optiName: "Stochastic Gradient Descent",
+            inputSize: 2,
+            outputSize: 1,
+            layerData: Array(3).fill(3)
+        }
 
-    const rebuildModel = () => {
-        setNeuralNetwork(createModel(layerData, acti, inputSize, outputSize, loss, opti));
-        setWeights(neuralNetwork.getWeights());
+        this.state.neuralNetwork = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
+        this.state.weights = this.state.neuralNetwork.getWeights();
+    }
+
+    rebuildModel() {
+        this.setState({neuralNetwork: createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)});
+        this.setState({weights: this.state.neuralNetwork.getWeights()});
     };
 
-    return (
-        <Container style={{
-            backgroundColor: "#f8e297", 
-            border: "thick solid",
-            borderRadius: "8px", 
-            borderColor: "#f8d197",
-            padding: "15px"
-        }}>
-            <Col>
-                <Row style={{minHeight: "50vh"}}>
-                    <Col md="auto">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Toggle as={Row} eventKey="0">
-                                <h3>Data Dimensions &#x290B;</h3>
-                            </Accordion.Toggle>
-                            <Accordion.Collapse eventKey="0">
-                                <div>
-                                    <br />
-                                    <h5>Input Size: {inputSize}</h5>
-                                    <Slider
-                                        step={1}
-                                        min={1}
-                                        max={5}
-                                        marks={true}
-                                        value={inputSize}
-                                        onChange={(_e, v) => {
-                                            setInputSize(v);
-                                            rebuildModel();
-                                        }} />
-                                    <h5>Output Size: {outputSize}</h5>
-                                    <Slider
-                                        step={1}
-                                        min={1}
-                                        max={5}
-                                        marks={true}
-                                        value={outputSize}
-                                        onChange={(_e, v) => {
-                                            setOutputSize(v);
-                                            rebuildModel();
-                                        }} />
-                                </div>
-                            </Accordion.Collapse>
-                        </Accordion>
-                        <hr />
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Toggle as={Row} eventKey="0">
-                                <h3>Hidden Layers &#x290B;</h3>
-                            </Accordion.Toggle>
-                            <Accordion.Collapse eventKey="0">
-                                <div>
-                                    <br />
-                                    <h5>Layers: {layerData.length}</h5>
-                                    <Slider
-                                        step={1}
-                                        min={1}
-                                        max={5}
-                                        marks={true}
-                                        value={layerData.length}
-                                        onChange={(_e, v) => {
-                                            let layers = layerData.length;
-                                            if (v > layers) {
-                                                layerData.push(3);
-                                            } else if(v < layers) {
-                                                layerData.pop();
-                                            }
-                                            rebuildModel();
-                                        }} />
-                                    {layerData.map((val, i) => {
-                                        return <span key={"s"+i}><h5 key={"l"+i}>Layer {i+1} width: {val}</h5><Slider
-                                            id={i}
-                                            key={i}
+    render() {
+        return (
+            <Container style={{
+                backgroundColor: "#f8e297", 
+                border: "thick solid",
+                borderRadius: "8px", 
+                borderColor: "#f8d197",
+                padding: "15px"
+            }}>
+                <Col>
+                    <Row style={{minHeight: "50vh"}}>
+                        <Col md="auto">
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle as={Row} eventKey="0">
+                                    <h3>Data Dimensions &#x290B;</h3>
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div>
+                                        <br />
+                                        <h5>Input Size: {this.state.inputSize}</h5>
+                                        <Slider
                                             step={1}
-                                            min={2}
+                                            min={1}
                                             max={5}
                                             marks={true}
-                                            value={val}
+                                            value={this.state.inputSize}
                                             onChange={(_e, v) => {
-                                                let newLD = Object.assign([], layerData);
-                                                newLD[i] = v;
-                                                setLayerData(newLD);
-                                                rebuildModel();
-                                            }} /></span>
-                                    })}
-                                </div>
-                            </Accordion.Collapse>
-                        </Accordion>
-                        <hr />
-                        <h3>Learning Parameters</h3>
-                        <br />
-                        <h5>Activation Function</h5>
-                        <DropdownButton 
-                            id="acti" 
-                            title={actiName}
-                            onSelect={(_ek, e) => {
-                                setActi(e.target.value);
-                                setActiName(e.target.innerHTML);
-                                rebuildModel();
-                            }}>
-                            <Dropdown.Item as="button" value="relu">ReLU</Dropdown.Item>                            
-                            <Dropdown.Item as="button" value="sigmoid">Sigmoid</Dropdown.Item>
-                            <Dropdown.Item as="button" value="softmax">SoftMax</Dropdown.Item>
-                            <Dropdown.Item as="button" value="softplus">Softplus</Dropdown.Item>
-                            <Dropdown.Item as="button" value="softsign">Softsign</Dropdown.Item>
-                            <Dropdown.Item as="button" value="tanh">Tanh</Dropdown.Item>
-                            <Dropdown.Item as="button" value="selu">SeLU</Dropdown.Item>
-                            <Dropdown.Item as="button" value="elu">ELU</Dropdown.Item>
-                        </DropdownButton>
-                        <h5>Optimizer</h5>
-                        <DropdownButton 
-                            id="opti" 
-                            title={optiName}
-                            onSelect={(_ek, e) => {
-                                setOpti(e.target.value);
-                                setOptiName(e.target.innerHTML);
-                                rebuildModel();
-                            }}>
-                            <Dropdown.Item as="button" value="sgd">Stochastic Gradient Descent</Dropdown.Item>
-                            <Dropdown.Item as="button" value="adagrad">Ada Grad</Dropdown.Item>
-                            <Dropdown.Item as="button" value="adadelta">Ada Delta</Dropdown.Item>
-                            <Dropdown.Item as="button" value="adam">Adam</Dropdown.Item>
-                            <Dropdown.Item as="button" value="adamax">Ada Max</Dropdown.Item>
-                            <Dropdown.Item as="button" value="rmsprop">RMS prop</Dropdown.Item>
-                        </DropdownButton>
-                        <h5>Loss</h5>
-                        <DropdownButton 
-                            id="loss" 
-                            title={lossName}
-                            onSelect={(_ek, e) => {
-                                setLoss(e.target.value);
-                                setLossName(e.target.innerHTML);
-                                rebuildModel();
-                            }}>
-                            <Dropdown.Item as="button" value="hinge">Hinge Loss</Dropdown.Item>
-                            <Dropdown.Item as="button" value="meanSquaredError">Mean Squared Error</Dropdown.Item>
-                            <Dropdown.Item as="button" value="categoricalCrossentropy">Softmax Cross Entropy</Dropdown.Item>
-                        </DropdownButton>
-                    </Col>
-                    <Col md={8}>
-                        <NNGraph weights={weights}/>
-                    </Col>
-                </Row>
-            </Col>
-        </Container>
-    )
+                                                this.setState({inputSize: v});
+                                                this.rebuildModel();
+                                            }} />
+                                        <h5>Output Size: {this.state.outputSize}</h5>
+                                        <Slider
+                                            step={1}
+                                            min={1}
+                                            max={5}
+                                            marks={true}
+                                            value={this.state.outputSize}
+                                            onChange={(_e, v) => {
+                                                this.setState({outputSize: v});
+                                                this.rebuildModel();
+                                            }} />
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+                            <hr />
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle as={Row} eventKey="0">
+                                    <h3>Hidden Layers &#x290B;</h3>
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div>
+                                        <br />
+                                        <h5>Layers: {this.state.layerData.length}</h5>
+                                        <Slider
+                                            step={1}
+                                            min={1}
+                                            max={5}
+                                            marks={true}
+                                            value={this.state.layerData.length}
+                                            onChange={(_e, v) => {
+                                                let layers = this.state.layerData.length;
+                                                if (v > layers) {
+                                                    this.state.layerData.push(3);
+                                                } else if(v < layers) {
+                                                    this.state.layerData.pop();
+                                                }
+                                                this.rebuildModel();
+                                            }} />
+                                        {this.state.layerData.map((val, i) => {
+                                            return <span key={"s"+i}><h5 key={"l"+i}>Layer {i+1} width: {val}</h5><Slider
+                                                id={i}
+                                                key={i}
+                                                step={1}
+                                                min={2}
+                                                max={5}
+                                                marks={true}
+                                                value={val}
+                                                onChange={(_e, v) => {
+                                                    let newLD = Object.assign([], this.state.layerData);
+                                                    newLD[i] = v;
+                                                    this.setState({layerData: newLD});
+                                                    this.rebuildModel();
+                                                }} /></span>
+                                        })}
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+                            <hr />
+                            <h3>Learning Parameters</h3>
+                            <br />
+                            <h5>Activation Function</h5>
+                            <DropdownButton 
+                                id="acti" 
+                                title={this.state.actiName}
+                                onSelect={(_ek, e) => {
+                                    this.setState({acti: e.target.value, actiName: e.target.innerHTML});
+                                    this.rebuildModel();
+                                }}>
+                                <Dropdown.Item as="button" value="relu">ReLU</Dropdown.Item>                            
+                                <Dropdown.Item as="button" value="sigmoid">Sigmoid</Dropdown.Item>
+                                <Dropdown.Item as="button" value="softmax">SoftMax</Dropdown.Item>
+                                <Dropdown.Item as="button" value="softplus">Softplus</Dropdown.Item>
+                                <Dropdown.Item as="button" value="softsign">Softsign</Dropdown.Item>
+                                <Dropdown.Item as="button" value="tanh">Tanh</Dropdown.Item>
+                                <Dropdown.Item as="button" value="selu">SeLU</Dropdown.Item>
+                                <Dropdown.Item as="button" value="elu">ELU</Dropdown.Item>
+                            </DropdownButton>
+                            <h5>Optimizer</h5>
+                            <DropdownButton 
+                                id="opti" 
+                                title={this.state.optiName}
+                                onSelect={(_ek, e) => {
+                                    this.setState({opti: e.target.value, optiName: e.target.innerHTML})
+                                    this.rebuildModel();
+                                }}>
+                                <Dropdown.Item as="button" value="sgd">Stochastic Gradient Descent</Dropdown.Item>
+                                <Dropdown.Item as="button" value="adagrad">Ada Grad</Dropdown.Item>
+                                <Dropdown.Item as="button" value="adadelta">Ada Delta</Dropdown.Item>
+                                <Dropdown.Item as="button" value="adam">Adam</Dropdown.Item>
+                                <Dropdown.Item as="button" value="adamax">Ada Max</Dropdown.Item>
+                                <Dropdown.Item as="button" value="rmsprop">RMS prop</Dropdown.Item>
+                            </DropdownButton>
+                            <h5>Loss</h5>
+                            <DropdownButton 
+                                id="loss" 
+                                title={this.state.lossName}
+                                onSelect={(_ek, e) => {
+                                    this.setState({loss: e.target.value, lossName: e.target.innerHTML});
+                                    this.rebuildModel();
+                                }}>
+                                <Dropdown.Item as="button" value="hinge">Hinge Loss</Dropdown.Item>
+                                <Dropdown.Item as="button" value="meanSquaredError">Mean Squared Error</Dropdown.Item>
+                                <Dropdown.Item as="button" value="categoricalCrossentropy">Softmax Cross Entropy</Dropdown.Item>
+                            </DropdownButton>
+                        </Col>
+                        <Col />
+                        <Col md={8}>
+                            <NNGraph weights={this.state.weights}/>
+                        </Col>
+                    </Row>
+                </Col>
+            </Container>
+        )
+    }
 }
 
 export default NNWidget;
