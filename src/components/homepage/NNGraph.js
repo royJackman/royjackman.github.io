@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as d3 from 'd3';
 import chroma from 'chroma-js';
 
-const weightColorScale = chroma.scale(["red", "blue"]).mode("lrgb");
+const weightColorScale = chroma.scale(["red", "blue"]).mode("lab");
 
 function bezierLink(x0, y0, x1, y1, weight, color) {
     var path = d3.path();

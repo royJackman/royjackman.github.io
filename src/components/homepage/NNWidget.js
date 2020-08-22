@@ -44,7 +44,7 @@ function NNWidget() {
         }}>
             <Col>
                 <Row style={{minHeight: "50vh"}}>
-                    <Col md="auto" style={{maxHeight: "75vh"}}>
+                    <Col md="auto">
                         <Accordion defaultActiveKey="0">
                             <Accordion.Toggle as={Row} eventKey="0">
                                 <h3>Data Dimensions &#x290B;</h3>
@@ -171,7 +171,6 @@ function NNWidget() {
                             <Dropdown.Item as="button" value="categoricalCrossentropy">Softmax Cross Entropy</Dropdown.Item>
                         </DropdownButton>
                     </Col>
-                    <Col />
                     <Col md={8}>
                         <NNGraph weights={weights}/>
                     </Col>
