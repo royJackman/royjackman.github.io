@@ -5,8 +5,8 @@ import NNGraph from './NNGraph';
 import * as tf from '@tensorflow/tfjs';
 import {Spring} from 'react-spring/renderprops';
 
-const PLAY_BUTTON = 'm 35 50 l 0 -26 l 45 26 l -45 26 l 0 -26 z';
-const STOP_BUTTON = 'm 75 75 l -50 0 l 0 -50 l 50 0 l 0 50 z';
+const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z';
+const STOP_BUTTON = 'm 26 26 l 0 48 l 16 0 l 0 -48 l -16 0 M 32 0 l 16 0 l 0 48 l -16 0 l 0 -48 z';
 
 function createModel(layerData, activation, inputSize, outputSize, loss, optimizer) {
     const model = tf.sequential();
@@ -194,10 +194,13 @@ class NNWidget extends React.Component {
                                             shape: this.state.playing ? STOP_BUTTON : PLAY_BUTTON,
                                             color: this.state.playing ? "#D21404" : "#03C04A"
                                         }}>
-                                            {({shape, color, ...rest}) => {
-                                                return (<svg viewBox="0 0 100 100" style={{maxHeight: "10vh"}}>
+                                            {({shape, color}) => {
+                                                return (<svg 
+                                                    viewBox="0 0 100 100" 
+                                                    style={{maxHeight: "10vh"}} 
+                                                    onClick={() => this.togglePlay()}>
                                                     <circle fill={color} cx="50" cy="50" r="50"/>
-                                                    <g onClick={() => this.togglePlay()}>
+                                                    <g>
                                                         <path fill="white" d={shape} />
                                                     </g>
                                                 </svg>);
@@ -207,6 +210,7 @@ class NNWidget extends React.Component {
                                 <Col />
                             </Row>
                         </Col>
+                        <Col />
                     </Row>
                 </Col>
             </Container>

@@ -5,11 +5,7 @@ import NNWidget from './NNWidget';
 function Homepage() {
     return (
         <Container fluid>
-            <Row>
-                <Col>
-                    <NNWidget />
-                </Col>
-            </Row>
+            <NNWidget />
         </Container>
     )
 }
