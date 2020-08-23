@@ -4,6 +4,7 @@ import Slider from '@material-ui/core/Slider';
 import NNGraph from './NNGraph';
 import * as tf from '@tensorflow/tfjs';
 import {Spring} from 'react-spring/renderprops';
+import * as math from 'mathjs';
 
 const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z';
 const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z';
@@ -37,12 +38,16 @@ class NNWidget extends React.Component {
             layerData: Array(3).fill(3),
             playing: false,
             data: {},
-            vars: ['x','y']
+            vars: ['x','y'],
+            func: math.parse(''),
+            ranges: [[-10, 10], [-10, 10]]
         }
 
         this.state.neuralNetwork = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
         this.state.weights = this.state.neuralNetwork.getWeights();
     }
+
+    rebuildParser(func) { this.setState({func: math.parse(func)}) }
 
     rebuildModel() {
         this.setState({neuralNetwork: createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)});
@@ -81,8 +86,10 @@ class NNWidget extends React.Component {
                                                 this.setState({inputSize: v}, this.rebuildModel());
                                                 if (this.state.vars.length < v) {
                                                     this.state.vars.push(DEFAULT_VARIABLES[v-1]);
+                                                    this.state.ranges.push([-10, 10]);
                                                 } else if (this.state.vars.length > v) {
                                                     this.state.vars.pop();
+                                                    this.state.ranges.pop();
                                                 }
                                             }} />
                                         <h5>Output Size: {this.state.outputSize}</h5>
@@ -230,10 +237,32 @@ class NNWidget extends React.Component {
                                                     newVars[i] = e.target.value;
                                                     this.setState({vars: newVars});
                                                 }}/>
+                                            <Slider
+                                                step={1}
+                                                min={-100}
+                                                max={100}
+                                                style={{maxWidth: "7vw"}}
+                                                value={this.state.ranges[i] ? this.state.ranges[i] : [-10, 10]}
+                                                valueLabelDisplay="auto"
+                                                onChange={(_e, v) => {
+                                                    let newRanges = Object.assign([], this.state.ranges);
+                                                    newRanges[i] = v;
+                                                    this.setState({ranges: newRanges});
+                                                }} />
                                         </Row>)
                                     })}
                                     <Row className="center-column">
-                                        <Button onClick={() => console.log(this.state.vars)}>Generate Data</Button>
+                                        <input 
+                                            type="text"
+                                            style={{
+                                                backgroundColor: "#fbeec1", 
+                                                color: "#bc986a",
+                                                borderColor: "#bc986a"
+                                            }}
+                                            onBlur={(e) => this.rebuildParser(e.target.value)} />
+                                    </Row>
+                                    <Row className="center-column">
+                                        <Button onClick={() => console.log(this.state.ranges)}>Generate Data</Button>
                                     </Row>
                                 </Col>
                             </Row>
