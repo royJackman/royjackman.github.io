@@ -1,5 +1,5 @@
 import React from 'react';
-import {Accordion, Container, Col, Row, DropdownButton, Dropdown} from 'react-bootstrap';
+import {Accordion, Container, Col, Row, DropdownButton, Dropdown, Button} from 'react-bootstrap';
 import Slider from '@material-ui/core/Slider';
 import NNGraph from './NNGraph';
 import * as tf from '@tensorflow/tfjs';
@@ -7,6 +7,8 @@ import {Spring} from 'react-spring/renderprops';
 
 const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z';
 const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z';
+
+const DEFAULT_VARIABLES = ['x', 'y', 'z', 'w', 't'];
 
 function createModel(layerData, activation, inputSize, outputSize, loss, optimizer) {
     const model = tf.sequential();
@@ -33,7 +35,9 @@ class NNWidget extends React.Component {
             inputSize: 2,
             outputSize: 1,
             layerData: Array(3).fill(3),
-            playing: false
+            playing: false,
+            data: {},
+            vars: ['x','y']
         }
 
         this.state.neuralNetwork = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
@@ -75,6 +79,11 @@ class NNWidget extends React.Component {
                                             value={this.state.inputSize}
                                             onChange={(_e, v) => {
                                                 this.setState({inputSize: v}, this.rebuildModel());
+                                                if (this.state.vars.length < v) {
+                                                    this.state.vars.push(DEFAULT_VARIABLES[v-1]);
+                                                } else if (this.state.vars.length > v) {
+                                                    this.state.vars.pop();
+                                                }
                                             }} />
                                         <h5>Output Size: {this.state.outputSize}</h5>
                                         <Slider
@@ -200,6 +209,32 @@ class NNWidget extends React.Component {
                                                 </svg>);
                                             }}
                                         </Spring>
+                                </Col>
+                            </Row>
+                            <Row className="center-column">
+                                <Col>
+                                    {Array(this.state.inputSize).fill(0).map((_val, i) => {
+                                        return (<Row key={"var"+i}>
+                                            <input 
+                                                key={i} 
+                                                type="text"
+                                                size="5"
+                                                style={{
+                                                    backgroundColor: "#fbeec1", 
+                                                    color: "#bc986a",
+                                                    borderColor: "#bc986a"
+                                                }}
+                                                defaultValue={this.state.vars[i]}
+                                                onChange={(e) => {
+                                                    let newVars = Object.assign([], this.state.vars);
+                                                    newVars[i] = e.target.value;
+                                                    this.setState({vars: newVars});
+                                                }}/>
+                                        </Row>)
+                                    })}
+                                    <Row className="center-column">
+                                        <Button onClick={() => console.log(this.state.vars)}>Generate Data</Button>
+                                    </Row>
                                 </Col>
                             </Row>
                         </Col>
