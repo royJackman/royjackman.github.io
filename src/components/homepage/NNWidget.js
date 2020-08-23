@@ -6,7 +6,7 @@ import * as tf from '@tensorflow/tfjs';
 import {Spring} from 'react-spring/renderprops';
 
 const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z';
-const STOP_BUTTON = 'm 26 26 l 0 48 l 16 0 l 0 -48 l -16 0 M 32 0 l 16 0 l 0 48 l -16 0 l 0 -48 z';
+const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z';
 
 function createModel(layerData, activation, inputSize, outputSize, loss, optimizer) {
     const model = tf.sequential();
@@ -183,7 +183,9 @@ class NNWidget extends React.Component {
                             </DropdownButton>
                         </Col>
                         <Col md={8} className="center-column">
-                            <NNGraph weights={this.state.weights}/>
+                            <Col md={10} className="center-column">
+                                <NNGraph weights={this.state.weights}/>
+                            </Col>
                             <Row>
                                 <Col className="center-column">
                                     <Spring
