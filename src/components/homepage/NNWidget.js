@@ -182,12 +182,10 @@ class NNWidget extends React.Component {
                                 <Dropdown.Item as="button" value="categoricalCrossentropy">Softmax Cross Entropy</Dropdown.Item>
                             </DropdownButton>
                         </Col>
-                        <Col />
-                        <Col md={8}>
+                        <Col md={8} className="center-column">
                             <NNGraph weights={this.state.weights}/>
                             <Row>
-                                <Col />
-                                <Col>
+                                <Col className="center-column">
                                     <Spring
                                         from={{ color: "#03C04A" }}
                                         to={{
@@ -207,10 +205,8 @@ class NNWidget extends React.Component {
                                             }}
                                         </Spring>
                                 </Col>
-                                <Col />
                             </Row>
                         </Col>
-                        <Col />
                     </Row>
                 </Col>
             </Container>

@@ -61,11 +61,9 @@ function ResumeItem(itemId, title, position, bullets, startDate, endDate, logo, 
                             <Col><ul>{bullets.map((b) => <li>{b}</li>)}</ul></Col>
                         </Row>
                         <Row fluid>
-                            <Col />
-                            <Row md="auto" className="padding-15">
+                            <Row md="auto" className="padding-15 center-column">
                             {tools.map((t) => <div style={{padding: '10px'}}><Image src={t} height="50"/></div>)}
                             </Row>
-                            <Col />
                         </Row>
                     </Container>
             </animated.div>

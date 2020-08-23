@@ -17,8 +17,7 @@ function Resume() {
     return (
         <Container>
             <Row>
-                <Col />
-                <Col md="auto">
+                <Col md="auto" className="center-column">
                     <ButtonToolbar>
                         <ButtonGroup>
                             <Button onClick={() => trans(CHRON)}>Chronological</Button>
@@ -27,16 +26,13 @@ function Resume() {
                         </ButtonGroup>
                     </ButtonToolbar>
                 </Col>
-                <Col />
             </Row>
             <Row>
-                <Col />
-                <Col id="resume-list" md={13}>
+                <Col id="resume-list" md={13} className="center-column">
                     <animated.div style={props}>
                         {new ResumeList(order)}
                     </animated.div>
                 </Col>
-                <Col />
             </Row>
         </Container>
     )
