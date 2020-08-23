@@ -74,8 +74,7 @@ class NNWidget extends React.Component {
                                             marks={true}
                                             value={this.state.inputSize}
                                             onChange={(_e, v) => {
-                                                this.setState({inputSize: v});
-                                                this.rebuildModel();
+                                                this.setState({inputSize: v}, this.rebuildModel());
                                             }} />
                                         <h5>Output Size: {this.state.outputSize}</h5>
                                         <Slider
@@ -85,8 +84,7 @@ class NNWidget extends React.Component {
                                             marks={true}
                                             value={this.state.outputSize}
                                             onChange={(_e, v) => {
-                                                this.setState({outputSize: v});
-                                                this.rebuildModel();
+                                                this.setState({outputSize: v}, this.rebuildModel());
                                             }} />
                                     </div>
                                 </Accordion.Collapse>
@@ -127,8 +125,7 @@ class NNWidget extends React.Component {
                                                 onChange={(_e, v) => {
                                                     let newLD = Object.assign([], this.state.layerData);
                                                     newLD[i] = v;
-                                                    this.setState({layerData: newLD});
-                                                    this.rebuildModel();
+                                                    this.setState({layerData: newLD}, this.rebuildModel());
                                                 }} /></span>
                                         })}
                                     </div>
@@ -142,8 +139,7 @@ class NNWidget extends React.Component {
                                 id="acti" 
                                 title={this.state.actiName}
                                 onSelect={(_ek, e) => {
-                                    this.setState({acti: e.target.value, actiName: e.target.innerHTML});
-                                    this.rebuildModel();
+                                    this.setState({acti: e.target.value, actiName: e.target.innerHTML}, this.rebuildModel());
                                 }}>
                                 <Dropdown.Item as="button" value="relu">ReLU</Dropdown.Item>                            
                                 <Dropdown.Item as="button" value="sigmoid">Sigmoid</Dropdown.Item>
@@ -159,8 +155,7 @@ class NNWidget extends React.Component {
                                 id="opti" 
                                 title={this.state.optiName}
                                 onSelect={(_ek, e) => {
-                                    this.setState({opti: e.target.value, optiName: e.target.innerHTML})
-                                    this.rebuildModel();
+                                    this.setState({opti: e.target.value, optiName: e.target.innerHTML}, this.rebuildModel())
                                 }}>
                                 <Dropdown.Item as="button" value="sgd">Stochastic Gradient Descent</Dropdown.Item>
                                 <Dropdown.Item as="button" value="adagrad">Ada Grad</Dropdown.Item>
@@ -174,8 +169,7 @@ class NNWidget extends React.Component {
                                 id="loss" 
                                 title={this.state.lossName}
                                 onSelect={(_ek, e) => {
-                                    this.setState({loss: e.target.value, lossName: e.target.innerHTML});
-                                    this.rebuildModel();
+                                    this.setState({loss: e.target.value, lossName: e.target.innerHTML}, this.rebuildModel());
                                 }}>
                                 <Dropdown.Item as="button" value="hinge">Hinge Loss</Dropdown.Item>
                                 <Dropdown.Item as="button" value="meanSquaredError">Mean Squared Error</Dropdown.Item>
