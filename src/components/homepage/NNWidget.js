@@ -58,10 +58,10 @@ class NNWidget extends React.Component {
             }}>
                 <Col>
                     <Row style={{minHeight: "50vh"}}>
-                        <Col md="auto">
+                        <Col md={3}>
                             <Accordion defaultActiveKey="0">
                                 <Accordion.Toggle as={Row} eventKey="0">
-                                    <h3>Data Dimensions &#x290B;</h3>
+                                    <h3>Data Shape &#x290B;</h3>
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="0">
                                     <div>
@@ -135,7 +135,7 @@ class NNWidget extends React.Component {
                                 </Accordion.Collapse>
                             </Accordion>
                             <hr />
-                            <h3>Learning Parameters</h3>
+                            <h3>Parameters</h3>
                             <br />
                             <h5>Activation Function</h5>
                             <DropdownButton 
