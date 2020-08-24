@@ -6,6 +6,7 @@ import * as tf from '@tensorflow/tfjs';
 import {Spring} from 'react-spring/renderprops';
 import * as math from 'mathjs';
 import * as _ from 'lodash';
+import Plotly from 'plotly.js-dist';
 
 const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z';
 const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z';
@@ -67,6 +68,44 @@ class NNWidget extends React.Component {
             retval.push(_.cloneDeep(temp));
         }
         return retval;
+    }
+
+    generateGraphs() {
+        if (this.state.data.length === 0) { 
+            document.getElementById(this.state.vars[0] + "_graph").innerHTML = <h2>Generate some data!</h2>;
+        }
+
+        var dataT = {};
+        var output = [];
+
+        this.state.vars.forEach((v) => dataT[v] = []);
+        this.state.data.forEach((val) => {
+            for (var i = 0; i < this.state.vars.length; i++) {
+                dataT[this.state.vars[i]].push(_.cloneDeep(val[this.state.vars[i]]));
+            }
+            output.push(val["_"]);
+        });
+
+        this.state.vars.forEach((v) => {
+            const elemId = v + "-graph";
+            document.getElementById(elemId).innerHTML = '';
+            Plotly.newPlot(elemId, [{
+                x: output,
+                y: dataT[v],
+                name: v,
+                mode: 'markers',
+                type: 'scatter'
+            }], {
+                title: v + " vs. Output",
+                xaxis: {
+                    title: "Output"
+                },
+                yaxis: {
+                    title: v
+                },
+                paper_bgcolor: "#f8e297"
+            });
+        });
     }
 
     rebuildParser(func) { this.setState({func: math.parse(func)}) }
@@ -305,12 +344,29 @@ class NNWidget extends React.Component {
                                         <Button onClick={() => {
                                             this.setState({dataLoading: true});
                                             this.generateData().then((retval) => {
-                                                this.setState({data: retval, dataLoading: false});
+                                                this.setState({data: retval, dataLoading: false}, () => this.generateGraphs());
                                             });
                                         }}>Generate Data</Button>
+                                        <Button onClick={() => console.log(this.state.data)}>Print</Button>
                                     </Row>
                                 </Col>
                             </Row>
+                        </Col>
+                    </Row>
+                    <hr />
+                    <Row>
+                        <Col className="center-column">
+                            {this.state.vars.map((val) => {
+                                return (
+                                    <Row 
+                                        id={val + "-graph"} 
+                                        key={val + "-graph"}
+                                        style={{
+                                            border: "8px",
+                                            borderRadius: "5px"
+                                        }}></Row>
+                                )
+                            })}
                         </Col>
                     </Row>
                 </Col>
