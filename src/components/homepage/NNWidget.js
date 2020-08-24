@@ -55,6 +55,7 @@ class NNWidget extends React.Component {
 
     async generateData() {
         var retval = [];
+        let illegal = [];
 
         const rangeRandom = (i) => {
             let rng = this.state.ranges[i][1] - this.state.ranges[i][0];
@@ -67,11 +68,17 @@ class NNWidget extends React.Component {
                 temp[this.state.vars[j]] = rangeRandom(j);
             }
             for (j = 0; j < this.state.outputSize; j++) {
-                temp["_" + j] = this.state.funcs[j].evaluate(temp);
+                try {
+                    temp["_" + j] = this.state.funcs[j].evaluate(temp)
+                } catch(_) {
+                    if (!illegal.includes(j + 1)) {illegal.push(j + 1)};
+                }
             }
             retval.push(_.cloneDeep(temp));
         }
-        console.log(retval);
+        if (illegal.length > 0) {
+            alert("The following functions are using illegal values! " + illegal);
+        }
         return retval;
     }
 
@@ -368,7 +375,7 @@ class NNWidget extends React.Component {
                                                             }}
                                                             defaultValue={this.state.funcs[i]}
                                                             onBlur={(e) => {
-                                                                this.rebuildParser(e.target.value, i);
+                                                                this.rebuildFunc(e.target.value, i);
                                                             }}/>
                                                     </Row>
                                                 </Col></Row>)
