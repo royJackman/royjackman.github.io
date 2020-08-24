@@ -5,6 +5,7 @@ import NNGraph from './NNGraph';
 import * as tf from '@tensorflow/tfjs';
 import {Spring} from 'react-spring/renderprops';
 import * as math from 'mathjs';
+import * as _ from 'lodash';
 
 const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z';
 const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z';
@@ -37,7 +38,8 @@ class NNWidget extends React.Component {
             outputSize: 1,
             layerData: Array(3).fill(3),
             playing: false,
-            data: {},
+            data: [],
+            dataLoading: false,
             vars: ['x','y'],
             func: math.parse(''),
             ranges: [[-10, 10], [-10, 10]]
@@ -45,6 +47,28 @@ class NNWidget extends React.Component {
 
         this.state.neuralNetwork = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
         this.state.weights = this.state.neuralNetwork.getWeights();
+    }
+
+    async generateData() {
+        var retval = [];
+        let step = (this.state.ranges[0][1] - this.state.ranges[0][0])/10.0;
+        for (var i = this.state.ranges[0][0]; i < this.state.ranges[0][1] + step; i += step) {
+            var temp = {};
+            temp[this.state.vars[0]] = i.valueOf();
+            retval.push(temp);
+        }
+        this.state.ranges.slice(1).forEach((val, i) => {
+            const rng = retval.length;
+            for (var j = 0; j < rng; j ++) {
+                let first = retval.shift();
+                let step = (val[1] - val[0])/10.0
+                for (var k = val[0]; k < val[1] + step; k+= step) {
+                    first[this.state.vars[i+1]] = k;
+                    retval.push(_.cloneDeep(first));
+                }
+            }
+        });
+        return retval;
     }
 
     rebuildParser(func) { this.setState({func: math.parse(func)}) }
@@ -262,7 +286,12 @@ class NNWidget extends React.Component {
                                             onBlur={(e) => this.rebuildParser(e.target.value)} />
                                     </Row>
                                     <Row className="center-column">
-                                        <Button onClick={() => console.log(this.state.ranges)}>Generate Data</Button>
+                                        <Button onClick={() => {
+                                            this.setState({dataLoading: true});
+                                            this.generateData().then((retval) => {
+                                                this.setState({data: retval, dataLoading: false});
+                                            });
+                                        }}>Generate Data</Button>
                                     </Row>
                                 </Col>
                             </Row>
