@@ -41,8 +41,9 @@ class NNWidget extends React.Component {
             data: [],
             dataLoading: false,
             vars: ['x','y'],
-            func: math.parse(''),
-            ranges: [[-10, 10], [-10, 10]]
+            func: math.parse('x+y'),
+            ranges: [[-10, 10], [-10, 10]],
+            numPoints: 100
         }
 
         this.state.neuralNetwork = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
@@ -51,23 +52,20 @@ class NNWidget extends React.Component {
 
     async generateData() {
         var retval = [];
-        let step = (this.state.ranges[0][1] - this.state.ranges[0][0])/10.0;
-        for (var i = this.state.ranges[0][0]; i < this.state.ranges[0][1] + step; i += step) {
-            var temp = {};
-            temp[this.state.vars[0]] = i.valueOf();
-            retval.push(temp);
+
+        const rangeRandom = (i) => {
+            let rng = this.state.ranges[i][1] - this.state.ranges[i][0];
+            return this.state.ranges[i][0] + Math.random() * rng;
         }
-        this.state.ranges.slice(1).forEach((val, i) => {
-            const rng = retval.length;
-            for (var j = 0; j < rng; j ++) {
-                let first = retval.shift();
-                let step = (val[1] - val[0])/10.0
-                for (var k = val[0]; k < val[1] + step; k+= step) {
-                    first[this.state.vars[i+1]] = k;
-                    retval.push(_.cloneDeep(first));
-                }
+
+        for (var i = 0; i < this.state.numPoints; i++) {
+            var temp = {};
+            for (var j = 0; j < this.state.vars.length; j++) {
+                temp[this.state.vars[j]] = rangeRandom(j);
             }
-        });
+            temp["_"] = this.state.func.evaluate(temp);
+            retval.push(_.cloneDeep(temp));
+        }
         return retval;
     }
 
@@ -246,10 +244,11 @@ class NNWidget extends React.Component {
                                 <Col>
                                     {Array(this.state.inputSize).fill(0).map((_val, i) => {
                                         return (<Row key={"var"+i}>
+                                            <h5>Var {i+1}:</h5>
                                             <input 
                                                 key={i} 
                                                 type="text"
-                                                size="5"
+                                                size="3"
                                                 style={{
                                                     backgroundColor: "#fbeec1", 
                                                     color: "#bc986a",
@@ -276,14 +275,31 @@ class NNWidget extends React.Component {
                                         </Row>)
                                     })}
                                     <Row className="center-column">
+                                        <h5>f({this.state.vars.join(",")})=</h5>
                                         <input 
                                             type="text"
+                                            size="16"
                                             style={{
                                                 backgroundColor: "#fbeec1", 
                                                 color: "#bc986a",
                                                 borderColor: "#bc986a"
                                             }}
+                                            defaultValue={this.state.vars.join("+")}
                                             onBlur={(e) => this.rebuildParser(e.target.value)} />
+                                    </Row>
+                                    <Row>
+                                        <h5>Points:</h5>
+                                        <input
+                                            min={0}
+                                            max={10000}
+                                            type="number"
+                                            style={{
+                                                backgroundColor: "#fbeec1", 
+                                                color: "#bc986a",
+                                                borderColor: "#bc986a"
+                                            }}
+                                            defaultValue={this.state.numPoints}
+                                            onChange={(e) => this.setState({numPoints: e.target.value})} />
                                     </Row>
                                     <Row className="center-column">
                                         <Button onClick={() => {
