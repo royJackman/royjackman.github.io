@@ -12,6 +12,7 @@ const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 
 const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z';
 
 const DEFAULT_VARIABLES = ['x', 'y', 'z', 'w', 't'];
+const DEFAULT_FUNCNAMES = ['f', 'g', 'h', 'p', 'q'];
 
 function createModel(layerData, activation, inputSize, outputSize, loss, optimizer) {
     const model = tf.sequential();
@@ -42,9 +43,10 @@ class NNWidget extends React.Component {
             data: [],
             dataLoading: false,
             vars: ['x','y'],
-            func: math.parse('x+y'),
             ranges: [[-10, 10], [-10, 10]],
-            numPoints: 100
+            numPoints: 100,
+            funcs: [math.parse('x+y')],
+            funcNames: ['f']
         }
 
         this.state.neuralNetwork = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
@@ -61,12 +63,15 @@ class NNWidget extends React.Component {
 
         for (var i = 0; i < this.state.numPoints; i++) {
             var temp = {};
-            for (var j = 0; j < this.state.vars.length; j++) {
+            for (var j = 0; j < this.state.inputSize; j++) {
                 temp[this.state.vars[j]] = rangeRandom(j);
             }
-            temp["_"] = this.state.func.evaluate(temp);
+            for (j = 0; j < this.state.outputSize; j++) {
+                temp["_" + j] = this.state.funcs[j].evaluate(temp);
+            }
             retval.push(_.cloneDeep(temp));
         }
+        console.log(retval);
         return retval;
     }
 
@@ -79,36 +84,45 @@ class NNWidget extends React.Component {
         var output = [];
 
         this.state.vars.forEach((v) => dataT[v] = []);
+        this.state.funcNames.forEach(() => output.push([]));
         this.state.data.forEach((val) => {
-            for (var i = 0; i < this.state.vars.length; i++) {
+            for (var i = 0; i < this.state.inputSize; i++) {
                 dataT[this.state.vars[i]].push(_.cloneDeep(val[this.state.vars[i]]));
             }
-            output.push(val["_"]);
+            for (i = 0; i < this.state.outputSize; i++) {
+                output[i].push(val["_" + i])
+            }
         });
 
         this.state.vars.forEach((v) => {
-            const elemId = v + "-graph";
-            document.getElementById(elemId).innerHTML = '';
-            Plotly.newPlot(elemId, [{
-                x: output,
-                y: dataT[v],
-                name: v,
-                mode: 'markers',
-                type: 'scatter'
-            }], {
-                title: v + " vs. Output",
-                xaxis: {
-                    title: "Output"
-                },
-                yaxis: {
-                    title: v
-                },
-                paper_bgcolor: "#f8e297"
-            });
+            for (var i = 0; i < this.state.outputSize; i++) {
+                const elemId = v + "-" + this.state.funcNames[i] + "-graph";
+                document.getElementById(elemId).innerHTML = '';
+                Plotly.newPlot(elemId, [{
+                    x: output[i],
+                    y: dataT[v],
+                    name: v,
+                    mode: 'markers',
+                    type: 'scatter'
+                }], {
+                    title: v + " vs. " + this.state.funcNames[i],
+                    xaxis: {
+                        title: this.state.funcNames[i]
+                    },
+                    yaxis: {
+                        title: v
+                    },
+                    paper_bgcolor: "#f8e297"
+                });
+            }
         });
     }
 
-    rebuildParser(func) { this.setState({func: math.parse(func)}) }
+    rebuildFunc(func, i) { 
+        let newFuncs = Object.assign([], this.state.funcs);
+        newFuncs[i] = math.parse(func);
+        this.setState({funcs: newFuncs});
+    }
 
     rebuildModel() {
         this.setState({neuralNetwork: createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)});
@@ -162,6 +176,14 @@ class NNWidget extends React.Component {
                                             value={this.state.outputSize}
                                             onChange={(_e, v) => {
                                                 this.setState({outputSize: v}, this.rebuildModel());
+                                                if (this.state.funcs.length < v) {
+                                                    this.state.funcs.push(
+                                                        math.parse(this.state.vars.join(["+", "-", "*"][Math.floor(Math.random() * 3)])));
+                                                    this.state.funcNames.push(DEFAULT_FUNCNAMES[v-1]);
+                                                } else if (this.state.funcs.length > v) {
+                                                    this.state.funcs.pop();
+                                                    this.state.funcNames.pop();
+                                                }
                                             }} />
                                     </div>
                                 </Accordion.Collapse>
@@ -281,50 +303,77 @@ class NNWidget extends React.Component {
                             </Row>
                             <Row className="center-column">
                                 <Col>
-                                    {Array(this.state.inputSize).fill(0).map((_val, i) => {
-                                        return (<Row key={"var"+i}>
-                                            <h5>Var {i+1}:</h5>
-                                            <input 
-                                                key={i} 
-                                                type="text"
-                                                size="3"
-                                                style={{
-                                                    backgroundColor: "#fbeec1", 
-                                                    color: "#bc986a",
-                                                    borderColor: "#bc986a"
-                                                }}
-                                                defaultValue={this.state.vars[i]}
-                                                onChange={(e) => {
-                                                    let newVars = Object.assign([], this.state.vars);
-                                                    newVars[i] = e.target.value;
-                                                    this.setState({vars: newVars});
-                                                }}/>
-                                            <Slider
-                                                step={1}
-                                                min={-100}
-                                                max={100}
-                                                style={{maxWidth: "7vw"}}
-                                                value={this.state.ranges[i] ? this.state.ranges[i] : [-10, 10]}
-                                                valueLabelDisplay="auto"
-                                                onChange={(_e, v) => {
-                                                    let newRanges = Object.assign([], this.state.ranges);
-                                                    newRanges[i] = v;
-                                                    this.setState({ranges: newRanges});
-                                                }} />
-                                        </Row>)
-                                    })}
-                                    <Row className="center-column">
-                                        <h5>f({this.state.vars.join(",")})=</h5>
-                                        <input 
-                                            type="text"
-                                            size="16"
-                                            style={{
-                                                backgroundColor: "#fbeec1", 
-                                                color: "#bc986a",
-                                                borderColor: "#bc986a"
-                                            }}
-                                            defaultValue={this.state.vars.join("+")}
-                                            onBlur={(e) => this.rebuildParser(e.target.value)} />
+                                    <Row>
+                                        <Col>
+                                            {Array(this.state.inputSize).fill(0).map((_, i) => {
+                                                return (<Row key={"var"+i}>
+                                                    <h5>Var {i+1}:</h5>
+                                                    <input 
+                                                        key={i} 
+                                                        type="text"
+                                                        size="3"
+                                                        style={{
+                                                            backgroundColor: "#fbeec1", 
+                                                            color: "#bc986a",
+                                                            borderColor: "#bc986a"
+                                                        }}
+                                                        defaultValue={this.state.vars[i]}
+                                                        onChange={(e) => {
+                                                            let newVars = Object.assign([], this.state.vars);
+                                                            newVars[i] = e.target.value;
+                                                            this.setState({vars: newVars});
+                                                        }}/>
+                                                    <Slider
+                                                        step={1}
+                                                        min={-100}
+                                                        max={100}
+                                                        value={this.state.ranges[i] ? this.state.ranges[i] : [-10, 10]}
+                                                        valueLabelDisplay="auto"
+                                                        onChange={(_e, v) => {
+                                                            let newRanges = Object.assign([], this.state.ranges);
+                                                            newRanges[i] = v;
+                                                            this.setState({ranges: newRanges});
+                                                        }} />
+                                                </Row>)
+                                            })}
+                                        </Col>
+                                        <Col>
+                                            {Array(this.state.outputSize).fill(0).map((_, i) => {return (<Row key={"var"+i}><Col>
+                                                    <Row>
+                                                        <h5>Function {i+1} Name:</h5>
+                                                        <input 
+                                                            key={"funcName-"+i} 
+                                                            type="text"
+                                                            style={{
+                                                                backgroundColor: "#fbeec1", 
+                                                                color: "#bc986a",
+                                                                borderColor: "#bc986a"
+                                                            }}
+                                                            defaultValue={this.state.funcNames[i]}
+                                                            onChange={(e) => {
+                                                                let newFuncNames = Object.assign([], this.state.funcNames);
+                                                                newFuncNames[i] = e.target.value;
+                                                                this.setState({funcNames: newFuncNames});
+                                                            }}/>
+                                                    </Row>
+                                                    <Row>
+                                                        <h5>{this.state.funcNames[i]}({this.state.vars.join(",")})=</h5>
+                                                        <input 
+                                                            key={"func-"+i} 
+                                                            type="text"
+                                                            style={{
+                                                                backgroundColor: "#fbeec1", 
+                                                                color: "#bc986a",
+                                                                borderColor: "#bc986a"
+                                                            }}
+                                                            defaultValue={this.state.funcs[i]}
+                                                            onBlur={(e) => {
+                                                                this.rebuildParser(e.target.value, i);
+                                                            }}/>
+                                                    </Row>
+                                                </Col></Row>)
+                                            })}
+                                        </Col>
                                     </Row>
                                     <Row>
                                         <h5>Points:</h5>
@@ -357,15 +406,19 @@ class NNWidget extends React.Component {
                     <Row>
                         <Col className="center-column">
                             {this.state.vars.map((val) => {
-                                return (
-                                    <Row 
-                                        id={val + "-graph"} 
-                                        key={val + "-graph"}
-                                        style={{
-                                            border: "8px",
-                                            borderRadius: "5px"
-                                        }}></Row>
-                                )
+                                return (<div style={{alignContent:"center"}} key={"row_"+val}>
+                                    {this.state.funcNames.map((v) => {
+                                        return (
+                                            <div 
+                                                id={val + "-" + v + "-graph"} 
+                                                key={val + "-" + v + "-graph"}
+                                                style={{
+                                                    border: "8px",
+                                                    borderRadius: "5px"
+                                                }}></div>
+                                        )
+                                    })}
+                                </div>)
                             })}
                         </Col>
                     </Row>
