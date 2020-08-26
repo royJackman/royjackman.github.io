@@ -140,10 +140,16 @@ class NNWidget extends React.Component {
 
     async startLearning() {
         const {inputs, outputs} = scrubData(_.cloneDeep(this.state.data), this.state.vars, this.state.outputSize);
-        const onEpochEnd = (epoch, logs) => {
-            console.log(epoch, logs)
+        let model;
+        try {
+            model = await this.localNNLoad('nn');
+            model.compile({optimizer: this.state.opti, loss: this.state.loss});
+        } catch(_) {
+            model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
         }
-        const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
+        const onEpochEnd = (epoch, logs) => {
+            this.setState({weights: model.getWeights()});
+        }
         await model.fit(
             inputs,
             outputs, 
