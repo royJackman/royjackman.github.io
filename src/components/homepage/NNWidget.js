@@ -38,7 +38,8 @@ class NNWidget extends React.Component {
             numPoints: 100,
             funcs: [math.parse('x+y')],
             funcNames: ['f'],
-            epochs: 50
+            epochs: 50,
+            currentLoss: 100
         }
 
         const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
@@ -147,8 +148,8 @@ class NNWidget extends React.Component {
         } catch(_) {
             model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
         }
-        const onEpochEnd = (epoch, logs) => {
-            this.setState({weights: model.getWeights()});
+        const onEpochEnd = (_epoch, logs) => {
+            this.setState({weights: model.getWeights(), currentLoss: logs.loss});
         }
         await model.fit(
             inputs,
@@ -158,7 +159,9 @@ class NNWidget extends React.Component {
                 callbacks: {onEpochEnd},
                 epochs: this.state.epochs
             }
-        ).then(() => this.setState({playing: false}));
+        ).then(() => this.setState({playing: false}, () => {
+            this.localNNSave(model, 'nn');
+        }));
     }
 
     togglePlay() { this.setState({ playing: !this.state.playing }, () => this.startLearning()) }
@@ -308,8 +311,11 @@ class NNWidget extends React.Component {
                             </DropdownButton>
                         </Col>
                         <Col md={8} className="center-column">
+                            <Row><h1><strong>Machine Learning, <span style={{fontStyle: "oblique"}}>while you wait!</span></strong></h1></Row>
                             <Col md={10} className="center-column">
                                 <NNGraph weights={this.state.weights}/>
+                                <h4>Current loss: {this.state.currentLoss}</h4>
+                                <Button onClick={() => localStorage.clear()}> Reset Network </Button>
                             </Col>
                             <Row>
                                 <Col className="center-column">
