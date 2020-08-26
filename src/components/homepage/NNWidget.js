@@ -7,23 +7,14 @@ import {Spring} from 'react-spring/renderprops';
 import * as math from 'mathjs';
 import * as _ from 'lodash';
 import Plotly from 'plotly.js-dist';
+import {createModel} from '../ai/NeuralNetworks';
+import {scrubData} from '../ai/util';
 
 const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z';
 const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z';
 
 const DEFAULT_VARIABLES = ['x', 'y', 'z', 'w', 't'];
 const DEFAULT_FUNCNAMES = ['f', 'g', 'h', 'p', 'q'];
-
-function createModel(layerData, activation, inputSize, outputSize, loss, optimizer) {
-    const model = tf.sequential();
-    model.add(tf.layers.dense({inputShape: [inputSize], units: layerData[0], activation: activation}));
-    for (var i = 0; i < layerData.length - 1; i++) {
-        model.add(tf.layers.dense({inputShape: [layerData[i]], units: layerData[i+1], activation: activation}));
-    }
-    model.add(tf.layers.dense({inputShape: [layerData[layerData.length - 1]], units: outputSize, activation: activation}));
-    model.compile({optimizer: optimizer, loss: loss});
-    return model;
-}
 
 class NNWidget extends React.Component {
     constructor(props) {
@@ -46,11 +37,13 @@ class NNWidget extends React.Component {
             ranges: [[-10, 10], [-10, 10]],
             numPoints: 100,
             funcs: [math.parse('x+y')],
-            funcNames: ['f']
+            funcNames: ['f'],
+            epochs: 50
         }
 
-        this.state.neuralNetwork = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
-        this.state.weights = this.state.neuralNetwork.getWeights();
+        const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
+        this.state.weights = model.getWeights();
+        this.localNNSave(model, 'nn');
     }
 
     async generateData() {
@@ -78,7 +71,7 @@ class NNWidget extends React.Component {
         }
         if (illegal.length > 0) {
             alert("The following functions are using illegal values! " + illegal);
-        }
+        } 
         return retval;
     }
 
@@ -125,6 +118,14 @@ class NNWidget extends React.Component {
         });
     }
 
+    async localNNLoad(url) {
+        return await tf.loadLayersModel('localstorage://' + url);
+    }
+
+    async localNNSave(model, url) {
+        return await model.save('localstorage://' + url);
+    }
+
     rebuildFunc(func, i) { 
         let newFuncs = Object.assign([], this.state.funcs);
         newFuncs[i] = math.parse(func);
@@ -132,11 +133,29 @@ class NNWidget extends React.Component {
     }
 
     rebuildModel() {
-        this.setState({neuralNetwork: createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)});
-        this.setState({weights: this.state.neuralNetwork.getWeights()});
+        const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
+        this.setState({weights: model.getWeights()});
+        this.localNNSave(model, 'nn');
     }
 
-    togglePlay() { this.setState({ playing: !this.state.playing }) }
+    async startLearning() {
+        const {inputs, outputs} = scrubData(_.cloneDeep(this.state.data), this.state.vars, this.state.outputSize);
+        const onEpochEnd = (epoch, logs) => {
+            console.log(epoch, logs)
+        }
+        const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti);
+        await model.fit(
+            inputs,
+            outputs, 
+            {
+                shuffle: true,
+                callbacks: {onEpochEnd},
+                epochs: this.state.epochs
+            }
+        ).then(() => this.setState({playing: false}));
+    }
+
+    togglePlay() { this.setState({ playing: !this.state.playing }, () => this.startLearning()) }
 
     render() {
         return (
@@ -298,7 +317,7 @@ class NNWidget extends React.Component {
                                                 return (<svg 
                                                     viewBox="0 0 100 100" 
                                                     style={{maxHeight: "10vh"}} 
-                                                    onClick={() => this.togglePlay()}>
+                                                    onClick={() => this.state.data.length > 0 ? this.togglePlay() : alert("No data generated!")}>
                                                     <circle fill={color} cx="50" cy="50" r="50"/>
                                                     <g>
                                                         <path fill="white" d={shape} />
@@ -395,6 +414,18 @@ class NNWidget extends React.Component {
                                             }}
                                             defaultValue={this.state.numPoints}
                                             onChange={(e) => this.setState({numPoints: e.target.value})} />
+                                        <h5>Epochs:</h5>
+                                        <input
+                                            min={0}
+                                            max={1000}
+                                            type="number"
+                                            style={{
+                                                backgroundColor: "#fbeec1", 
+                                                color: "#bc986a",
+                                                borderColor: "#bc986a"
+                                            }}
+                                            defaultValue={this.state.epochs}
+                                            onChange={(e) => this.setState({epochs: e.target.value})} />
                                     </Row>
                                     <Row className="center-column">
                                         <Button style={{margin: "15px"}} onClick={() => {
@@ -403,7 +434,6 @@ class NNWidget extends React.Component {
                                                 this.setState({data: retval, dataLoading: false}, () => this.generateGraphs());
                                             });
                                         }}>Generate Data</Button>
-                                        <Button onClick={() => console.log(this.state.data)}>Print</Button>
                                     </Row>
                                 </Col>
                             </Row>
