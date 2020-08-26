@@ -308,10 +308,10 @@ class NNWidget extends React.Component {
                                         </Spring>
                                 </Col>
                             </Row>
-                            <Row className="center-column">
+                            <Row className="center-column" style={{margin: "15px"}}>
                                 <Col>
                                     <Row>
-                                        <Col>
+                                        <Col style={{marginRight: "15px"}}>
                                             {Array(this.state.inputSize).fill(0).map((_, i) => {
                                                 return (<Row key={"var"+i}>
                                                     <h5>Var {i+1}:</h5>
@@ -397,7 +397,7 @@ class NNWidget extends React.Component {
                                             onChange={(e) => this.setState({numPoints: e.target.value})} />
                                     </Row>
                                     <Row className="center-column">
-                                        <Button onClick={() => {
+                                        <Button style={{margin: "15px"}} onClick={() => {
                                             this.setState({dataLoading: true});
                                             this.generateData().then((retval) => {
                                                 this.setState({data: retval, dataLoading: false}, () => this.generateGraphs());
