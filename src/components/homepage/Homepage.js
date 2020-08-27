@@ -1,10 +1,10 @@
-import React from 'react';
-import NNWidget from './NNWidget';
+import React from 'react'
+import NNWidget from './NNWidget'
 
-function Homepage() {
-    return (
-        <NNWidget />
-    )
+function Homepage () {
+  return (
+    <NNWidget />
+  )
 }
 
-export default Homepage;
+export default Homepage
