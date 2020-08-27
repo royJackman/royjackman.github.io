@@ -6,7 +6,6 @@ import * as tf from '@tensorflow/tfjs'
 import { Spring } from 'react-spring/renderprops'
 import * as math from 'mathjs'
 import * as _ from 'lodash'
-import Plotly from 'plotly.js-dist'
 import { createModel } from '../ai/NeuralNetworks'
 import { scrubData } from '../ai/util'
 
@@ -95,27 +94,14 @@ class NNWidget extends React.Component {
       }
     })
 
-    this.state.vars.forEach((v) => {
-      for (var i = 0; i < this.state.outputSize; i++) {
-        const elemId = v + '-' + this.state.funcNames[i] + '-graph'
-        document.getElementById(elemId).innerHTML = ''
-        Plotly.newPlot(elemId, [{
-          x: output[i],
-          y: dataT[v],
-          name: v,
-          mode: 'markers',
-          type: 'scatter'
-        }], {
-          title: v + ' vs. ' + this.state.funcNames[i],
-          xaxis: {
-            title: this.state.funcNames[i]
-          },
-          yaxis: {
-            title: v
-          },
-          paper_bgcolor: '#f8e297'
-        })
-      }
+    import('../ui/Graphing').then(Graphing => {
+      this.state.vars.forEach((v) => {
+        for (var i = 0; i < this.state.outputSize; i++) {
+          const elemId = v + '-' + this.state.funcNames[i] + '-graph'
+          document.getElementById(elemId).innerHTML = ''
+          Graphing.Scatterplot(elemId, output[i], dataT[v], v, this.state.funcNames[i])
+        }
+      })
     })
   }
 

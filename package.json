@@ -36,7 +36,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "lint": "yarn eslint src/**/*.js"
+    "lint": "yarn eslint src/**/*.js",
+    "fix": "yarn eslint src/**/*.js --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
