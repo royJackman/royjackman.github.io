@@ -3,6 +3,7 @@ import { Container, Col, Row, Button, ButtonGroup, ButtonToolbar } from 'react-b
 import ResumeList, { CHRON, EDU, WORK } from './ResumeList'
 import { useSpring, animated } from 'react-spring'
 import delay from 'delay'
+import CV from '../../static/RoyJackmanCV.pdf'
 
 function Resume () {
   const [order, setOrder] = useState(CHRON)
@@ -19,10 +20,13 @@ function Resume () {
       <Row>
         <Col md="auto" className="center-column">
           <ButtonToolbar>
-            <ButtonGroup>
+            <ButtonGroup className="mr-2">
               <Button onClick={() => trans(CHRON)}>Chronological</Button>
               <Button onClick={() => trans(WORK)}>Work First</Button>
               <Button onClick={() => trans(EDU)}>School First</Button>
+            </ButtonGroup>
+            <ButtonGroup className="mr-2">
+              <Button><a style={{ textDecoration: 'none', color: 'white'}} href={CV} download="RoyJackmanCV.pdf">Get me as a PDF!</a></Button>
             </ButtonGroup>
           </ButtonToolbar>
         </Col>
