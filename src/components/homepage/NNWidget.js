@@ -38,7 +38,7 @@ class NNWidget extends React.Component {
       funcs: [math.parse('x+y')],
       funcNames: ['f'],
       epochs: 50,
-      currentLoss: 100
+      currentLoss: 1.00
     }
 
     const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
@@ -293,18 +293,15 @@ class NNWidget extends React.Component {
                 }}>
                 <Dropdown.Item as="button" value="hinge">Hinge Loss</Dropdown.Item>
                 <Dropdown.Item as="button" value="meanSquaredError">Mean Squared Error</Dropdown.Item>
-                <Dropdown.Item as="button" value="categoricalCrossentropy">Softmax Cross Entropy</Dropdown.Item>
               </DropdownButton>
             </Col>
             <Col md={8} className="center-column">
               <Row><h1><strong>Machine Learning, <span style={{ fontStyle: 'oblique' }}>while you wait!</span></strong></h1></Row>
               <Col md={10} className="center-column">
                 <NNGraph weights={this.state.weights}/>
-                <h4>Current loss: {this.state.currentLoss}</h4>
-                <Button onClick={() => localStorage.clear()}> Reset Network </Button>
               </Col>
               <Row>
-                <Col className="center-column">
+                <Col style={{ textAlign: 'center' }}>
                   <Spring
                     from={{ color: '#03C04A' }}
                     to={{
@@ -314,7 +311,7 @@ class NNWidget extends React.Component {
                     {({ shape, color }) => {
                       return (<svg
                         viewBox="0 0 100 100"
-                        style={{ maxHeight: '10vh' }}
+                        style={{ maxHeight: '10vh', maxWidth: '10vh' }}
                         onClick={() => this.state.data.length > 0 ? this.togglePlay() : alert('No data generated!')}>
                         <circle fill={color} cx="50" cy="50" r="50"/>
                         <g>
@@ -323,6 +320,9 @@ class NNWidget extends React.Component {
                       </svg>)
                     }}
                   </Spring>
+                </Col>
+                <Col>
+                  <h4>Current loss: <br/>{this.state.currentLoss}</h4> <Button onClick={() => localStorage.clear()}> Reset Network </Button>
                 </Col>
               </Row>
               <Row className="center-column" style={{ margin: '15px' }}>

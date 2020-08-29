@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import * as d3 from 'd3'
 import chroma from 'chroma-js'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const weightColorScale = chroma.scale(['red', 'blue']).mode('lab')
 
@@ -9,13 +10,19 @@ function bezierLink (x0, y0, x1, y1, weight, color) {
   const midX = (x0 + x1) / 2
   path.moveTo(x0, y0)
   path.bezierCurveTo(midX, y0, midX, y1, x1, y1)
-  return (<path
-    d={path.toString()}
-    id={[x0, y0, x1, y1].join('_')}
-    key={[x0, y0, x1, y1].join('_')}
-    fill="none"
-    strokeWidth={Math.abs(weight * 4)}
-    stroke={weightColorScale(color)} />)
+  return (<Tooltip
+    key={'tooltip_' + [x0, y0, x1, y1].join('_')}
+    title={weight}
+    placement='bottom'
+    interactive>
+    <path
+      d={path.toString()}
+      id={[x0, y0, x1, y1].join('_')}
+      key={[x0, y0, x1, y1].join('_')}
+      fill="none"
+      strokeWidth={Math.abs(weight * 5)}
+      stroke={weightColorScale(color)} />
+  </Tooltip>)
 }
 
 function NNGraph (weightResponse) {
