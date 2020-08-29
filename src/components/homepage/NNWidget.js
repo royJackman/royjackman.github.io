@@ -150,6 +150,8 @@ class NNWidget extends React.Component {
     }))
   }
 
+  timedLearning (epochs) { this.setState({ epochs }, () => this.togglePlay()) }
+
   togglePlay () { this.setState({ playing: !this.state.playing }, () => this.startLearning()) }
 
   render () {
@@ -301,6 +303,19 @@ class NNWidget extends React.Component {
                 <NNGraph weights={this.state.weights}/>
               </Col>
               <Row>
+                {[10, 50, 100].map((val, i) => {
+                  const epochsToRadius = (epochs) => 28 + 0.14 * epochs
+                  return (<Col key={val + '_col'}>
+                    <svg
+                      key={val + '_svg'}
+                      viewBox="0 0 100 100"
+                      style={{ maxHeight: '10vh', maxWidth: '10vh' }}
+                      onClick={() => this.state.data.length > 0 ? this.timedLearning(val) : alert('No data generated!')}>
+                      <circle key={val + '_circle'} fill="white" cx="50" cy="50" r={epochsToRadius(val)} stroke="black"/>
+                      <text key={val + '_text'} x="50" y="55" textAnchor="middle" color="black">{val}x</text>
+                    </svg>
+                  </Col>)
+                })}
                 <Col style={{ textAlign: 'center' }}>
                   <Spring
                     from={{ color: '#03C04A' }}
@@ -322,7 +337,7 @@ class NNWidget extends React.Component {
                   </Spring>
                 </Col>
                 <Col>
-                  <h4>Current loss: <br/>{this.state.currentLoss}</h4> <Button onClick={() => localStorage.clear()}> Reset Network </Button>
+                  <h4>Loss: <br/>{this.state.currentLoss.toFixed(6)}</h4> <Button onClick={() => localStorage.clear()}> Reset Network </Button>
                 </Col>
               </Row>
               <Row className="center-column" style={{ margin: '15px' }}>
