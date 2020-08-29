@@ -54,6 +54,12 @@ code {
   min-height: calc(100vh - 225px);
 }
 
+.text-input {
+  background-color: #fbeec1;
+  color: #bc986a;
+  border-color: #bc986a;
+}
+
 .text-light {
   color: #daad86;
 }

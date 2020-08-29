@@ -26,7 +26,7 @@ function Resume () {
               <Button onClick={() => trans(EDU)}>School First</Button>
             </ButtonGroup>
             <ButtonGroup className="mr-2">
-              <Button><a style={{ textDecoration: 'none', color: 'white'}} href={CV} download="RoyJackmanCV.pdf">Get me as a PDF!</a></Button>
+              <Button><a style={{ textDecoration: 'none', color: 'white' }} href={CV} download="RoyJackmanCV.pdf">Get me as a PDF!</a></Button>
             </ButtonGroup>
           </ButtonToolbar>
         </Col>

@@ -336,11 +336,7 @@ class NNWidget extends React.Component {
                             key={i}
                             type="text"
                             size="3"
-                            style={{
-                              backgroundColor: '#fbeec1',
-                              color: '#bc986a',
-                              borderColor: '#bc986a'
-                            }}
+                            className="text-input"
                             defaultValue={this.state.vars[i]}
                             onChange={(e) => {
                               const newVars = Object.assign([], this.state.vars)
@@ -369,11 +365,7 @@ class NNWidget extends React.Component {
                             <input
                               key={'funcName-' + i}
                               type="text"
-                              style={{
-                                backgroundColor: '#fbeec1',
-                                color: '#bc986a',
-                                borderColor: '#bc986a'
-                              }}
+                              className="text-input"
                               defaultValue={this.state.funcNames[i]}
                               onChange={(e) => {
                                 const newFuncNames = Object.assign([], this.state.funcNames)
@@ -386,11 +378,7 @@ class NNWidget extends React.Component {
                             <input
                               key={'func-' + i}
                               type="text"
-                              style={{
-                                backgroundColor: '#fbeec1',
-                                color: '#bc986a',
-                                borderColor: '#bc986a'
-                              }}
+                              className="text-input"
                               defaultValue={this.state.funcs[i]}
                               onBlur={(e) => {
                                 this.rebuildFunc(e.target.value, i)
@@ -406,11 +394,7 @@ class NNWidget extends React.Component {
                       min={0}
                       max={10000}
                       type="number"
-                      style={{
-                        backgroundColor: '#fbeec1',
-                        color: '#bc986a',
-                        borderColor: '#bc986a'
-                      }}
+                      className="text-input"
                       defaultValue={this.state.numPoints}
                       onChange={(e) => this.setState({ numPoints: e.target.value })} />
                     <h5>Epochs:</h5>
@@ -418,11 +402,7 @@ class NNWidget extends React.Component {
                       min={0}
                       max={1000}
                       type="number"
-                      style={{
-                        backgroundColor: '#fbeec1',
-                        color: '#bc986a',
-                        borderColor: '#bc986a'
-                      }}
+                      className="text-input"
                       defaultValue={this.state.epochs}
                       onChange={(e) => this.setState({ epochs: e.target.value })} />
                   </Row>
