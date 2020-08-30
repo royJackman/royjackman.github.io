@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import chroma from 'chroma-js'
 import Tooltip from '@material-ui/core/Tooltip'
 
-const weightColorScale = chroma.scale(['red', 'blue']).mode('lab')
+export const weightColorScale = chroma.scale(['red', 'blue']).mode('lab')
 
 function bezierLink (x0, y0, x1, y1, weight, color) {
   var path = d3.path()

@@ -39,7 +39,9 @@ class NNWidget extends React.Component {
       funcNames: ['f'],
       epochs: 50,
       modelEpochs: 0,
-      currentLoss: 1.00
+      currentLoss: 1.00,
+      maxWeight: Promise.resolve(0.00001),
+      minWeight: Promise.resolve(-0.00001)
     }
 
     const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
@@ -122,7 +124,12 @@ class NNWidget extends React.Component {
 
   rebuildModel () {
     const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
-    this.setState({ weights: model.getWeights(), modelEpochs: 0 })
+    const weights = model.getWeights()
+    const maxWeights = weights.map((val) => val.array().then((val) => Math.max(...val.flat())))
+    const maxWeight = maxWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h > t ? h : t)))
+    const minWeights = weights.map((val) => val.array().then((val) => Math.min(...val.flat())))
+    const minWeight = minWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h < t ? h : t)))
+    this.setState({ weights, maxWeight, minWeight, modelEpochs: 0 })
     this.localNNSave(model, 'nn')
   }
 
@@ -136,7 +143,12 @@ class NNWidget extends React.Component {
       model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
     }
     const onEpochEnd = (_epoch, logs) => {
-      this.setState({ weights: model.getWeights(), currentLoss: logs.loss, modelEpochs: this.state.modelEpochs + 1 })
+      const weights = model.getWeights()
+      const maxWeights = weights.map((val) => val.array().then((val) => Math.max(...val.flat())))
+      const maxWeight = maxWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h > t ? h : t)))
+      const minWeights = weights.map((val) => val.array().then((val) => Math.min(...val.flat())))
+      const minWeight = minWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h < t ? h : t)))
+      this.setState({ weights, maxWeight, minWeight, currentLoss: logs.loss, modelEpochs: this.state.modelEpochs + 1 })
     }
     await model.fit(
       inputs,
@@ -314,6 +326,22 @@ class NNWidget extends React.Component {
               <Col md={10} className="center-column">
                 <NNGraph weights={this.state.weights}/>
               </Col>
+              <Row>
+                <div id="weight-gradient" className="weight-gradient" onMouseMove={(e) => {
+                  const offset = e.nativeEvent.offsetX
+                  const width = document.getElementById('weight-gradient').clientWidth
+                  this.state.maxWeight.then((mx) => {
+                    this.state.minWeight.then((mn) => {
+                      document.getElementById('current-weight').innerHTML = ((offset / width) * (mx - mn) + mn)
+                    })
+                  })
+                }}
+                onMouseOut={(e) => {
+                  document.getElementById('current-weight').innerHTML = ''
+                }}>
+                  <span id="current-weight" style={{ color: 'white' }}></span>
+                </div>
+              </Row>
               <Row>
                 {[10, 50, 100].map((val, i) => {
                   const epochsToRadius = (epochs) => 28 + 0.14 * epochs
