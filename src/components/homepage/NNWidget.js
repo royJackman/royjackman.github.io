@@ -1,5 +1,5 @@
 import React from 'react'
-import { Accordion, Container, Col, Row, DropdownButton, Dropdown, Button } from 'react-bootstrap'
+import { Accordion, Container, Col, Row, DropdownButton, Dropdown, Button, Image } from 'react-bootstrap'
 import Slider from '@material-ui/core/Slider'
 import NNGraph from './NNGraph'
 import * as tf from '@tensorflow/tfjs'
@@ -38,6 +38,7 @@ class NNWidget extends React.Component {
       funcs: [math.parse('x+y')],
       funcNames: ['f'],
       epochs: 50,
+      modelEpochs: 0,
       currentLoss: 1.00
     }
 
@@ -121,7 +122,7 @@ class NNWidget extends React.Component {
 
   rebuildModel () {
     const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
-    this.setState({ weights: model.getWeights() })
+    this.setState({ weights: model.getWeights(), modelEpochs: 0 })
     this.localNNSave(model, 'nn')
   }
 
@@ -135,7 +136,7 @@ class NNWidget extends React.Component {
       model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
     }
     const onEpochEnd = (_epoch, logs) => {
-      this.setState({ weights: model.getWeights(), currentLoss: logs.loss })
+      this.setState({ weights: model.getWeights(), currentLoss: logs.loss, modelEpochs: this.state.modelEpochs + 1 })
     }
     await model.fit(
       inputs,
@@ -298,7 +299,18 @@ class NNWidget extends React.Component {
               </DropdownButton>
             </Col>
             <Col md={8} className="center-column">
-              <Row><h1><strong>Machine Learning, <span style={{ fontStyle: 'oblique' }}>while you wait!</span></strong></h1></Row>
+              <Row>
+                <Col>
+                  <h1 style={{ fontFamily: 'courier' }}><strong>The Neural Network Widget</strong></h1>
+                  <h4><strong>Machine Learning, <span style={{ fontStyle: 'oblique' }}>while you wait!</span></strong></h4>
+                </Col>
+                <Col>
+                  <Image src='https://openclipart.org/download/250498/Neural-Network-2.svg' style={{
+                    maxWidth: '15vw',
+                    maxHeight: '15vh'
+                  }}/>
+                </Col>
+              </Row>
               <Col md={10} className="center-column">
                 <NNGraph weights={this.state.weights}/>
               </Col>
@@ -311,7 +323,7 @@ class NNWidget extends React.Component {
                       viewBox="0 0 100 100"
                       style={{ maxHeight: '10vh', maxWidth: '10vh' }}
                       onClick={() => this.state.data.length > 0 ? this.timedLearning(val) : alert('No data generated!')}>
-                      <circle key={val + '_circle'} fill="white" cx="50" cy="50" r={epochsToRadius(val)} stroke="black"/>
+                      <circle key={val + '_circle'} fill='#f8d197' cx="50" cy="50" r={epochsToRadius(val)} stroke="black"/>
                       <text key={val + '_text'} x="50" y="55" textAnchor="middle" color="black">{val}x</text>
                     </svg>
                   </Col>)
@@ -337,7 +349,7 @@ class NNWidget extends React.Component {
                   </Spring>
                 </Col>
                 <Col>
-                  <h4>Loss: <br/>{this.state.currentLoss.toFixed(6)}</h4> <Button onClick={() => localStorage.clear()}> Reset Network </Button>
+                  <h4>Loss: <br/>{this.state.currentLoss.toFixed(6)} <br/>Epochs:<br/>{this.state.modelEpochs}</h4> <Button onClick={() => this.setState({ modelEpochs: 0 }, () => localStorage.clear())}> Hard Reset </Button>
                 </Col>
               </Row>
               <Row className="center-column" style={{ margin: '15px' }}>
