@@ -309,18 +309,26 @@ class NNWidget extends React.Component {
                 <Dropdown.Item as="button" value="hinge">Hinge Loss</Dropdown.Item>
                 <Dropdown.Item as="button" value="meanSquaredError">Mean Squared Error</Dropdown.Item>
               </DropdownButton>
+              <hr />
+              <h3>Controls</h3>
+              <br />
+              <Button className='margin-15' onClick={() => this.setState({ modelEpochs: 0 }, () => localStorage.clear())}> Hard Reset </Button>
+              <Button className='margin-15' onClick={async () => {
+                const model = await this.localNNLoad('nn')
+                model.save('downloads://MyNetwork')
+              }}> Save Weights</Button>
             </Col>
             <Col md={8} className="center-column">
               <Row>
-                <Col>
-                  <h1 style={{ fontFamily: 'courier' }}><strong>The Neural Network Widget</strong></h1>
-                  <h4><strong>Machine Learning, <span style={{ fontStyle: 'oblique' }}>while you wait!</span></strong></h4>
-                </Col>
                 <Col>
                   <Image src='https://openclipart.org/download/250498/Neural-Network-2.svg' style={{
                     maxWidth: '15vw',
                     maxHeight: '15vh'
                   }}/>
+                </Col>
+                <Col>
+                  <h1 style={{ fontFamily: 'courier' }}><strong>The Neural Network Widget</strong></h1>
+                  <h4><strong>Machine Learning, <span style={{ fontStyle: 'oblique' }}>while you wait!</span></strong></h4>
                 </Col>
               </Row>
               <Col md={10} className="center-column">
@@ -377,7 +385,7 @@ class NNWidget extends React.Component {
                   </Spring>
                 </Col>
                 <Col>
-                  <h4>Loss: <br/>{this.state.currentLoss.toFixed(6)} <br/>Epochs:<br/>{this.state.modelEpochs}</h4> <Button onClick={() => this.setState({ modelEpochs: 0 }, () => localStorage.clear())}> Hard Reset </Button>
+                  <h5>Loss: <br/>{this.state.currentLoss.toFixed(6)} <br/>Epochs:<br/>{this.state.modelEpochs}</h5>
                 </Col>
               </Row>
               <Row className="center-column" style={{ margin: '15px' }}>

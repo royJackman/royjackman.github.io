@@ -40,6 +40,10 @@ code {
   text-justify: inter-word;
 }
 
+.margin-15 {
+  margin: 5px;
+}
+
 .primary-color {
   background-color: #659dbd;
 }
