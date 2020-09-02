@@ -181,7 +181,7 @@ class NNWidget extends React.Component {
             <Col md={3}>
               <Accordion defaultActiveKey="0">
                 <Accordion.Toggle as={Row} eventKey="0">
-                  <h3>Data Shape &#x290B;</h3>
+                  <h3>Data Shape</h3>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="0">
                   <div>
@@ -227,7 +227,7 @@ class NNWidget extends React.Component {
               <hr />
               <Accordion defaultActiveKey="0">
                 <Accordion.Toggle as={Row} eventKey="0">
-                  <h3>Hidden Layers &#x290B;</h3>
+                  <h3>Hidden Layers</h3>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="0">
                   <div>
