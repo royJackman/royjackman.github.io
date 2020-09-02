@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <div className="footer">
       <Container fluid className="primary-color white-text">
-        <Row>
+        <Row style={{ paddingTop: '8px' }}>
           <Col />
           <Col md={5}>
             <h5 className="title">The Riddle Section</h5>

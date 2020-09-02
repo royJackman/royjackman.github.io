@@ -312,6 +312,22 @@ class NNWidget extends React.Component {
               <hr />
               <h3>Controls</h3>
               <br />
+                <h5>Points:
+                <input
+                    min={0}
+                    max={10000}
+                    type="number"
+                    className="text-input"
+                    defaultValue={this.state.numPoints}
+                    onChange={(e) => this.setState({ numPoints: e.target.value })} /></h5>
+                <h5>Epochs:
+                <input
+                    min={0}
+                    max={1000}
+                    type="number"
+                    className="text-input"
+                    defaultValue={this.state.epochs}
+                    onChange={(e) => this.setState({ epochs: e.target.value })} /></h5>
               <Button className='margin-15' onClick={() => this.setState({ modelEpochs: 0 }, () => localStorage.clear())}> Hard Reset </Button>
               <Button className='margin-15' onClick={async () => {
                 const model = await this.localNNLoad('nn')
@@ -320,7 +336,7 @@ class NNWidget extends React.Component {
             </Col>
             <Col md={8} className="center-column">
               <Row>
-                <Col>
+                <Col md={3} className='vertically-center-contents center-column'>
                   <Image src='https://openclipart.org/download/250498/Neural-Network-2.svg' style={{
                     maxWidth: '15vw',
                     maxHeight: '15vh'
@@ -450,24 +466,6 @@ class NNWidget extends React.Component {
                         </Col></Row>)
                       })}
                     </Col>
-                  </Row>
-                  <Row>
-                    <h5>Points:</h5>
-                    <input
-                      min={0}
-                      max={10000}
-                      type="number"
-                      className="text-input"
-                      defaultValue={this.state.numPoints}
-                      onChange={(e) => this.setState({ numPoints: e.target.value })} />
-                    <h5>Epochs:</h5>
-                    <input
-                      min={0}
-                      max={1000}
-                      type="number"
-                      className="text-input"
-                      defaultValue={this.state.epochs}
-                      onChange={(e) => this.setState({ epochs: e.target.value })} />
                   </Row>
                   <Row className="center-column">
                     <Button style={{ margin: '15px' }} onClick={() => {
