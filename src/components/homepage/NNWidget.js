@@ -401,7 +401,7 @@ class NNWidget extends React.Component {
                   </Spring>
                 </Col>
                 <Col>
-                  <h5>Loss: <br/>{this.state.currentLoss.toFixed(6)} <br/>Epochs:<br/>{this.state.modelEpochs}</h5>
+                  <h5>Loss: <br/>{this.state.currentLoss.toFixed(5)} <br/>Epochs:<br/>{this.state.modelEpochs}</h5>
                 </Col>
               </Row>
               <Row className="center-column" style={{ margin: '15px' }}>
