@@ -102,7 +102,14 @@ class NNWidget extends React.Component {
         for (var i = 0; i < this.state.outputSize; i++) {
           const elemId = v + '-' + this.state.funcNames[i] + '-graph'
           document.getElementById(elemId).innerHTML = ''
-          Graphing.Scatterplot(elemId, output[i], dataT[v], v, this.state.funcNames[i])
+          const data = [{
+            x: output[i],
+            y: dataT[v],
+            name: v,
+            mode: 'markers',
+            type: 'scatter'
+          }]
+          Graphing.Scatterplot(elemId, v, this.state.funcNames[i], data)
         }
       })
     })
@@ -312,22 +319,22 @@ class NNWidget extends React.Component {
               <hr />
               <h3>Controls</h3>
               <br />
-                <h5>Points:
+              <h5>Points:
                 <input
-                    min={0}
-                    max={10000}
-                    type="number"
-                    className="text-input"
-                    defaultValue={this.state.numPoints}
-                    onChange={(e) => this.setState({ numPoints: e.target.value })} /></h5>
-                <h5>Epochs:
+                  min={0}
+                  max={10000}
+                  type="number"
+                  className="text-input"
+                  defaultValue={this.state.numPoints}
+                  onChange={(e) => this.setState({ numPoints: e.target.value })} /></h5>
+              <h5>Epochs:
                 <input
-                    min={0}
-                    max={1000}
-                    type="number"
-                    className="text-input"
-                    defaultValue={this.state.epochs}
-                    onChange={(e) => this.setState({ epochs: e.target.value })} /></h5>
+                  min={0}
+                  max={1000}
+                  type="number"
+                  className="text-input"
+                  defaultValue={this.state.epochs}
+                  onChange={(e) => this.setState({ epochs: e.target.value })} /></h5>
               <Button className='margin-15' onClick={() => this.setState({ modelEpochs: 0 }, () => localStorage.clear())}> Hard Reset </Button>
               <Button className='margin-15' onClick={async () => {
                 const model = await this.localNNLoad('nn')
