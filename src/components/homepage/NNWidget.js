@@ -2,12 +2,11 @@ import React from 'react'
 import { Accordion, Container, Col, Row, DropdownButton, Dropdown, Button, Image } from 'react-bootstrap'
 import Slider from '@material-ui/core/Slider'
 import NNGraph from './NNGraph'
-import * as tf from '@tensorflow/tfjs'
 import { Spring } from 'react-spring/renderprops'
 import * as math from 'mathjs'
 import * as _ from 'lodash'
-import { createModel } from '../ai/NeuralNetworks'
-import { scrubData } from '../ai/util'
+import { createModel, localNNLoad, localNNSave } from '../ai/NeuralNetworks'
+import { generateData, scrubData } from '../ai/util'
 
 const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z'
 const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z'
@@ -46,36 +45,7 @@ class NNWidget extends React.Component {
 
     const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
     this.state.weights = model.getWeights()
-    this.localNNSave(model, 'nn')
-  }
-
-  async generateData () {
-    var retval = []
-    const illegal = []
-
-    const rangeRandom = (i) => {
-      const rng = this.state.ranges[i][1] - this.state.ranges[i][0]
-      return this.state.ranges[i][0] + Math.random() * rng
-    }
-
-    for (var i = 0; i < this.state.numPoints; i++) {
-      var temp = {}
-      for (var j = 0; j < this.state.inputSize; j++) {
-        temp[this.state.vars[j]] = rangeRandom(j)
-      }
-      for (j = 0; j < this.state.outputSize; j++) {
-        try {
-          temp['_' + j] = this.state.funcs[j].evaluate(temp)
-        } catch (_) {
-          if (!illegal.includes(j + 1)) { illegal.push(j + 1) };
-        }
-      }
-      retval.push(_.cloneDeep(temp))
-    }
-    if (illegal.length > 0) {
-      alert('The following functions are using illegal values! ' + illegal)
-    }
-    return retval
+    localNNSave(model, 'nn')
   }
 
   generateGraphs () {
@@ -115,14 +85,6 @@ class NNWidget extends React.Component {
     })
   }
 
-  async localNNLoad (url) {
-    return await tf.loadLayersModel('localstorage://' + url)
-  }
-
-  async localNNSave (model, url) {
-    return await model.save('localstorage://' + url)
-  }
-
   rebuildFunc (func, i) {
     const newFuncs = Object.assign([], this.state.funcs)
     newFuncs[i] = math.parse(func)
@@ -137,14 +99,14 @@ class NNWidget extends React.Component {
     const minWeights = weights.map((val) => val.array().then((val) => Math.min(...val.flat())))
     const minWeight = minWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h < t ? h : t)))
     this.setState({ weights, maxWeight, minWeight, modelEpochs: 0 })
-    this.localNNSave(model, 'nn')
+    localNNSave(model, 'nn')
   }
 
   async startLearning () {
     const { inputs, outputs } = scrubData(_.cloneDeep(this.state.data), this.state.vars, this.state.outputSize)
     let model
     try {
-      model = await this.localNNLoad('nn')
+      model = await localNNLoad('nn')
       model.compile({ optimizer: this.state.opti, loss: this.state.loss })
     } catch (_) {
       model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
@@ -166,7 +128,7 @@ class NNWidget extends React.Component {
         epochs: this.state.epochs
       }
     ).then(() => this.setState({ playing: false }, () => {
-      this.localNNSave(model, 'nn')
+      localNNSave(model, 'nn')
     }))
   }
 
@@ -337,7 +299,7 @@ class NNWidget extends React.Component {
                   onChange={(e) => this.setState({ epochs: e.target.value })} /></h5>
               <Button className='margin-15' onClick={() => this.setState({ modelEpochs: 0 }, () => localStorage.clear())}> Hard Reset </Button>
               <Button className='margin-15' onClick={async () => {
-                const model = await this.localNNLoad('nn')
+                const model = await localNNLoad('nn')
                 model.save('downloads://MyNetwork')
               }}> Save Weights</Button>
             </Col>
@@ -477,7 +439,14 @@ class NNWidget extends React.Component {
                   <Row className="center-column">
                     <Button style={{ margin: '15px' }} onClick={() => {
                       this.setState({ dataLoading: true })
-                      this.generateData().then((retval) => {
+                      generateData(
+                        this.state.ranges,
+                        this.state.numPoints,
+                        this.state.inputSize,
+                        this.state.outputSize,
+                        this.state.vars,
+                        this.state.funcs
+                      ).then((retval) => {
                         this.setState({ data: retval, dataLoading: false }, () => this.generateGraphs())
                       })
                     }}>Generate Data</Button>

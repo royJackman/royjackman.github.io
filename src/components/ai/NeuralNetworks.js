@@ -10,3 +10,11 @@ export function createModel (layerData, activation, inputSize, outputSize, loss,
   model.compile({ optimizer, loss })
   return model
 }
+
+export async function localNNLoad (url) {
+  return await tf.loadLayersModel('localstorage://' + url)
+}
+
+export async function localNNSave (model, url) {
+  return await model.save('localstorage://' + url)
+}
