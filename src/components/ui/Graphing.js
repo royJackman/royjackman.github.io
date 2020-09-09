@@ -4,12 +4,12 @@ export function Scatterplot (elemId, name, funcName, data) {
   Plotly.newPlot(elemId,
     data,
     {
-      title: name + ' vs. ' + funcName,
+      title: funcName + ' vs. ' + name,
       xaxis: {
-        title: funcName
+        title: name
       },
       yaxis: {
-        title: name
+        title: funcName
       },
       paper_bgcolor: '#f8e297'
     })

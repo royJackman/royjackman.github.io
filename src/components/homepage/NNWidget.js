@@ -75,16 +75,16 @@ class NNWidget extends React.Component {
           document.getElementById(elemId).innerHTML = ''
           // eslint-disable-next-line prefer-const
           let data = [{
-            x: output[i],
-            y: dataT[v],
+            x: dataT[v],
+            y: output[i],
             name: v,
             mode: 'markers',
             type: 'scatter'
           }]
           if (this.state.predictions.length > 0) {
             data.push({
-              x: this.state.predictions[i],
-              y: dataT[v],
+              x: dataT[v],
+              y: this.state.predictions[i],
               name: 'prediction',
               mode: 'markers',
               type: 'scatter'
@@ -147,7 +147,7 @@ class NNWidget extends React.Component {
 
   timedLearning (epochs) { this.setState({ epochs }, () => this.togglePlay()) }
 
-  togglePlay () { this.setState({ playing: !this.state.playing }, () => this.startLearning()) }
+  togglePlay () { this.setState({ playing: !this.state.playing }, () => { if (this.state.playing) this.startLearning() }) }
 
   render () {
     return (
@@ -330,7 +330,9 @@ class NNWidget extends React.Component {
                 </Col>
               </Row>
               <Col md={10} className="center-column">
-                <NNGraph weights={this.state.weights}/>
+                <div style={{ borderStyle: 'inset', borderColor: '#bc986a', borderWidth: 15, borderRadius: 15, backgroundColor: '#e0d0a4' }}>
+                  <NNGraph weights={this.state.weights}/>
+                </div>
               </Col>
               <Row>
                 <div id="weight-gradient" className="weight-gradient" onMouseMove={(e) => {
@@ -422,17 +424,19 @@ class NNWidget extends React.Component {
                       {Array(this.state.outputSize).fill(0).map((_, i) => {
                         return (<Row key={'var' + i}><Col>
                           <Row>
-                            <h5>Function {i + 1} Name:</h5>
-                            <input
-                              key={'funcName-' + i}
-                              type="text"
-                              className="text-input"
-                              defaultValue={this.state.funcNames[i]}
-                              onChange={(e) => {
-                                const newFuncNames = Object.assign([], this.state.funcNames)
-                                newFuncNames[i] = e.target.value
-                                this.setState({ funcNames: newFuncNames })
-                              }}/>
+                            <h5>Function {i + 1} Name:
+                              <input
+                                key={'funcName-' + i}
+                                type="text"
+                                size="3"
+                                className="text-input"
+                                defaultValue={this.state.funcNames[i]}
+                                onChange={(e) => {
+                                  const newFuncNames = Object.assign([], this.state.funcNames)
+                                  newFuncNames[i] = e.target.value
+                                  this.setState({ funcNames: newFuncNames })
+                                }}/>
+                            </h5>
                           </Row>
                           <Row>
                             <h5>{this.state.funcNames[i]}({this.state.vars.join(',')})=</h5>
