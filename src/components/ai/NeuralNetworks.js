@@ -18,3 +18,7 @@ export async function localNNLoad (url) {
 export async function localNNSave (model, url) {
   return await model.save('localstorage://' + url)
 }
+
+export function predictData (model, input) {
+  return model.predict(input)
+}

@@ -1,6 +1,14 @@
 import * as tf from '@tensorflow/tfjs'
 import * as _ from 'lodash'
 
+export function getWeightBounds (weights) {
+  const maxWeights = weights.map((val) => val.array().then((val) => Math.max(...val.flat())))
+  const maxWeight = maxWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h > t ? h : t)))
+  const minWeights = weights.map((val) => val.array().then((val) => Math.min(...val.flat())))
+  const minWeight = minWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h < t ? h : t)))
+  return { maxWeight, minWeight }
+}
+
 export async function generateData (ranges, numPoints, inputSize, outputSize, vars, funcs) {
   var retval = []
   const illegal = []
@@ -32,8 +40,6 @@ export async function generateData (ranges, numPoints, inputSize, outputSize, va
 
 export function scrubData (data, vars, outputSize) {
   return tf.tidy(() => {
-    tf.util.shuffle(data)
-
     const inputs = data.map(d => {
       var retval = []
       vars.forEach((v) => {

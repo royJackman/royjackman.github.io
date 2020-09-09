@@ -6,7 +6,7 @@ import { Spring } from 'react-spring/renderprops'
 import * as math from 'mathjs'
 import * as _ from 'lodash'
 import { createModel, localNNLoad, localNNSave } from '../ai/NeuralNetworks'
-import { generateData, scrubData } from '../ai/util'
+import { getWeightBounds, generateData, scrubData } from '../ai/util'
 
 const PLAY_BUTTON = 'm 35 50 l 0 -27 l 15 9 l 15 9 l 15 9 m 0 0 l -15 9 l -15 9 l -15 9 l 0 -27 z'
 const STOP_BUTTON = 'm 26 74 l 0 -48 l 16 0 l 0 48 l -16 0 m 32 -48 l 16 0 l 0 48 l -16 0 l 0 -48 z'
@@ -39,6 +39,7 @@ class NNWidget extends React.Component {
       optiName: 'Stoch. Gradient Descent',
       outputSize: 1,
       playing: false,
+      predictions: [],
       ranges: [[-10, 10], [-10, 10]],
       vars: ['x', 'y']
     }
@@ -72,13 +73,23 @@ class NNWidget extends React.Component {
         for (var i = 0; i < this.state.outputSize; i++) {
           const elemId = v + '-' + this.state.funcNames[i] + '-graph'
           document.getElementById(elemId).innerHTML = ''
-          const data = [{
+          // eslint-disable-next-line prefer-const
+          let data = [{
             x: output[i],
             y: dataT[v],
             name: v,
             mode: 'markers',
             type: 'scatter'
           }]
+          if (this.state.predictions.length > 0) {
+            data.push({
+              x: this.state.predictions[i],
+              y: dataT[v],
+              name: 'prediction',
+              mode: 'markers',
+              type: 'scatter'
+            })
+          }
           Graphing.Scatterplot(elemId, v, this.state.funcNames[i], data)
         }
       })
@@ -94,16 +105,13 @@ class NNWidget extends React.Component {
   rebuildModel () {
     const model = createModel(this.state.layerData, this.state.acti, this.state.inputSize, this.state.outputSize, this.state.loss, this.state.opti)
     const weights = model.getWeights()
-    const maxWeights = weights.map((val) => val.array().then((val) => Math.max(...val.flat())))
-    const maxWeight = maxWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h > t ? h : t)))
-    const minWeights = weights.map((val) => val.array().then((val) => Math.min(...val.flat())))
-    const minWeight = minWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h < t ? h : t)))
+    const { maxWeight, minWeight } = getWeightBounds(weights)
     this.setState({ weights, maxWeight, minWeight, modelEpochs: 0 })
     localNNSave(model, 'nn')
   }
 
   async startLearning () {
-    const { inputs, outputs } = scrubData(_.cloneDeep(this.state.data), this.state.vars, this.state.outputSize)
+    const { inputs, outputs, outputMax, outputMin } = scrubData(_.cloneDeep(this.state.data), this.state.vars, this.state.outputSize)
     let model
     try {
       model = await localNNLoad('nn')
@@ -113,10 +121,7 @@ class NNWidget extends React.Component {
     }
     const onEpochEnd = (_epoch, logs) => {
       const weights = model.getWeights()
-      const maxWeights = weights.map((val) => val.array().then((val) => Math.max(...val.flat())))
-      const maxWeight = maxWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h > t ? h : t)))
-      const minWeights = weights.map((val) => val.array().then((val) => Math.min(...val.flat())))
-      const minWeight = minWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h < t ? h : t)))
+      const { maxWeight, minWeight } = getWeightBounds(weights)
       this.setState({ weights, maxWeight, minWeight, currentLoss: logs.loss, modelEpochs: this.state.modelEpochs + 1 })
     }
     await model.fit(
@@ -127,7 +132,15 @@ class NNWidget extends React.Component {
         callbacks: { onEpochEnd },
         epochs: this.state.epochs
       }
-    ).then(() => this.setState({ playing: false }, () => {
+    ).then(() => this.setState({
+      playing: false,
+      predictions: model.predict(inputs)
+        .mul(outputMax.sub(outputMin))
+        .add(outputMin)
+        .transpose()
+        .arraySync()
+    }, () => {
+      this.generateGraphs()
       localNNSave(model, 'nn')
     }))
   }
@@ -297,7 +310,7 @@ class NNWidget extends React.Component {
                   className="text-input"
                   defaultValue={this.state.epochs}
                   onChange={(e) => this.setState({ epochs: e.target.value })} /></h5>
-              <Button className='margin-15' onClick={() => this.setState({ modelEpochs: 0 }, () => localStorage.clear())}> Hard Reset </Button>
+              <Button className='margin-15' onClick={() => this.setState({ modelEpochs: 0, currentLoss: 1.0 }, () => localStorage.clear())}> Hard Reset </Button>
               <Button className='margin-15' onClick={async () => {
                 const model = await localNNLoad('nn')
                 model.save('downloads://MyNetwork')
@@ -447,7 +460,7 @@ class NNWidget extends React.Component {
                         this.state.vars,
                         this.state.funcs
                       ).then((retval) => {
-                        this.setState({ data: retval, dataLoading: false }, () => this.generateGraphs())
+                        this.setState({ data: retval, dataLoading: false, predictions: [] }, () => this.generateGraphs())
                       })
                     }}>Generate Data</Button>
                   </Row>
