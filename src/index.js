@@ -10,7 +10,7 @@ import Footer from './components/ui/Footer'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const router = (
-  <Router basename={`${process.env.PUBLIC_URL}/`}>
+  <Router basename={process.env.PUBLIC_URL}>
     <Header />
     <div className="switch">
       <Switch>
