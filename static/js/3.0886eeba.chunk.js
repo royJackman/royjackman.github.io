@@ -1,2 +1,0 @@
-(this["webpackJsonproyjackman-github-io"]=this["webpackJsonproyjackman-github-io"]||[]).push([[3],{266:function(t,i,n){"use strict";n.r(i),n.d(i,"Scatterplot",(function(){return e}));var o=n(265),a=n.n(o);function e(t,i,n,o){a.a.newPlot(t,o,{title:n+" vs. "+i,xaxis:{title:i},yaxis:{title:n},paper_bgcolor:"#f8e297"})}}}]);
-//# sourceMappingURL=3.0886eeba.chunk.js.map
