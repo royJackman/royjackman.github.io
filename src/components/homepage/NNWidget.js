@@ -30,7 +30,7 @@ class NNWidget extends React.Component {
             type: 'scatter'
         }],
         {
-            margin: { t: 20, b: 20, l: 20, r: 20 },
+            margin: { t: 25, b: 25, l: 25, r: 25 },
             paper_bgcolor: 'rgba(0, 0, 0, 0)',
             plot_bgcolor: 'rgba(0, 0, 0, 0)',
             xaxis: { gridcolor: 'black' },
@@ -52,7 +52,7 @@ class NNWidget extends React.Component {
                             </div>
                         </Col>
                         <Col>
-                            <div className='box-30v margin-auto' id='data-graph' style={{ float: 'left' }} />
+                            <div className='box-30v' id='data-graph' style={{ float: 'left' }} />
                         </Col>
                     </Row>
                 </Col>
