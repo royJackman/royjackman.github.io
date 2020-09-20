@@ -8,6 +8,7 @@ import * as serviceWorker from './serviceWorker'
 import Header from './components/ui/Header'
 import Footer from './components/ui/Footer'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import NNWidget from './components/ai/nn/NNWidget'
 
 const router = (
   <Router basename={process.env.PUBLIC_URL}>
@@ -15,6 +16,7 @@ const router = (
     <div className="switch">
       <Switch>
         <Route exact path='/' component={Homepage} />
+        <Route exact path='/nn' component={NNWidget} />
         <Route exact path='/resume' component={Resume} />
       </Switch>
     </div>
