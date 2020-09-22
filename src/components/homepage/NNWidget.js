@@ -40,6 +40,20 @@ class NNWidget extends React.Component {
     this.rebuildGraph()
   }
 
+  componentDidUpdate (_prevProps, prevState) {
+    if (prevState.layerData !== this.state.layerData ||
+        prevState.depth !== this.state.depth ||
+        prevState.problemType !== this.state.problemType ||
+        prevState.activationFunction !== this.state.activationFunction ||
+        prevState.optimizer !== this.state.optimizer ||
+        prevState.loss !== this.state.loss) {
+      this.rebuildModel()
+      if (prevState.depth !== this.state.depth) {
+        this.rebuildGraph()
+      }
+    }
+  }
+
   rebuildGraph () {
     const data = {
       x: this.state.xData,
@@ -58,7 +72,8 @@ class NNWidget extends React.Component {
   }
 
   rebuildModel () {
-    const model = createModel(this.state.layerData, this.state.activationFunction.value, 1, 1, this.state.loss.value, this.state.optimizer.value)
+    const inputSize = this.state.problemType.value === 'regression' ? (this.state.depth ? 2 : 1) : (this.state.depth ? 3 : 2)
+    const model = createModel(this.state.layerData, this.state.activationFunction.value, inputSize, 1, this.state.loss.value, this.state.optimizer.value)
     this.setState({ weights: model.getWeights() })
     localNNSave(model, 'nn')
   }
@@ -103,7 +118,7 @@ class NNWidget extends React.Component {
                     onChange={(_e, v) => {
                       const newLD = Object.assign([], this.state.layerData)
                       newLD[i] = v
-                      this.setState({ layerData: newLD }, this.rebuildModel())
+                      this.setState({ layerData: newLD })
                     }} /></span>
               })}
             </Col>
@@ -114,24 +129,24 @@ class NNWidget extends React.Component {
                 id='activation-function'
                 title={this.state.activationFunction.name}
                 items={ACTIVATION_FUNCTIONS}
-                onSelectHandler={(_ek, e) => this.setState({ activationFunction: { name: e.target.innerHTML, value: e.target.value } }, this.rebuildModel())} />
+                onSelectHandler={(_ek, e) => this.setState({ activationFunction: { name: e.target.innerHTML, value: e.target.value } })} />
               <h5>Optimizer</h5>
               <DropButton
                 id='optimizer'
                 title={this.state.optimizer.name}
                 items={OPTIMIZERS}
-                onSelectHandler={(_ek, e) => this.setState({ optimizer: { name: e.target.innerHTML, value: e.target.value } }, this.rebuildModel())} />
+                onSelectHandler={(_ek, e) => this.setState({ optimizer: { name: e.target.innerHTML, value: e.target.value } })} />
               <h5>Loss</h5>
               <DropButton
                 id='optimizer'
                 title={this.state.loss.name}
                 items={LOSSES}
-                onSelectHandler={(_ek, e) => this.setState({ loss: { name: e.target.innerHTML, value: e.target.value } }, this.rebuildModel())} />
+                onSelectHandler={(_ek, e) => this.setState({ loss: { name: e.target.innerHTML, value: e.target.value } })} />
             </Col>
             <Col>
               <h3>Problem Specs</h3>
               <h5>2D <Switch
-                onChange={(change) => this.setState({ depth: change }, () => this.rebuildGraph())}
+                onChange={(change) => this.setState({ depth: change })}
                 checked={this.state.depth}
                 checkedIcon={false} uncheckedIcon={false}
                 onColor='#a3f025' offColor='#1212aa'
