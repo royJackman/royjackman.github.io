@@ -25,7 +25,7 @@ class NNWidget extends React.Component {
       layerData: Array(3).fill(2),
       loss: LOSSES[0],
       optimizer: OPTIMIZERS[0],
-      problemType: { name: 'Regression (Continuous)', value: 'regression' },
+      problemType: PROBLEM_TYPES[0],
       xData: Array.from({ length: 40 }, () => rando(0, 10, 'float')),
       yData: Array.from({ length: 40 }, () => rando(0, 10, 'float')),
       zData: Array.from({ length: 40 }, () => rando(0, 10, 'float'))
@@ -37,23 +37,23 @@ class NNWidget extends React.Component {
   }
 
   componentDidMount () {
-    import('plotly.js-dist').then(Plotly => {
-      Plotly.newPlot('data-graph',
-        [{
-          x: this.state.xData,
-          y: this.state.yData,
-          mode: 'markers',
-          type: 'scatter'
-        }],
-        {
-          margin: { t: 25, b: 25, l: 25, r: 25 },
-          paper_bgcolor: 'rgba(0, 0, 0, 0)',
-          plot_bgcolor: 'rgba(0, 0, 0, 0)',
-          xaxis: { gridcolor: 'black' },
-          yaxis: { gridcolor: 'black' }
-        },
-        { responsive: true }
-      )
+    this.rebuildGraph()
+  }
+
+  rebuildGraph () {
+    const data = {
+      x: this.state.xData,
+      y: this.state.yData,
+      mode: 'markers'
+    }
+    if (this.state.depth) {
+      data.type = 'scatter3d'
+      data.z = this.state.zData
+    } else {
+      data.type = 'scatter'
+    }
+    import('../ui/Graphing').then(graphing => {
+      graphing.MLGraph('data-graph', [data])
     })
   }
 
@@ -131,7 +131,7 @@ class NNWidget extends React.Component {
             <Col>
               <h3>Problem Specs</h3>
               <h5>2D <Switch
-                onChange={(change) => this.setState({ depth: change })}
+                onChange={(change) => this.setState({ depth: change }, () => this.rebuildGraph())}
                 checked={this.state.depth}
                 checkedIcon={false} uncheckedIcon={false}
                 onColor='#a3f025' offColor='#1212aa'
