@@ -6,29 +6,30 @@ import Slider from '@material-ui/core/Slider'
 import '../ui/ui.css'
 import DropButton from '../ui/DropButton'
 import Switch from 'react-switch'
+import rando from '@nastyox/rando.js'
 
 const ACTIVATION_FUNCTIONS = [{ name: 'ReLU', value: 'relu' }, { name: 'Sigmoid', value: 'sigmoid' }, { name: 'Softmax', value: 'softmax' }, { name: 'Softplus', value: 'softplus' }, { name: 'Softsign', value: 'softsign' }, { name: 'Tanh', value: 'tanh' }, { name: 'SeLU', value: 'selu' }, { name: 'ELU', value: 'elu' }]
 const LOSSES = [{ name: 'Hinge Loss', value: 'hinge' }, { name: 'Mean Squared Error', value: 'meanSquaredError' }]
 const OPTIMIZERS = [{ name: 'Stochastic Gradient Descent', value: 'sgd' }, { name: 'Ada Grad', value: 'adagrad' }, { name: 'Ada Delta', value: 'adadelta' }, { name: 'Adam', value: 'adam' }, { name: 'Ada Max', value: 'adamax' }, { name: 'RMS Prop', value: 'rmsprop' }]
 const PROBLEM_TYPES = [{ name: 'Regression (Continuous)', value: 'regression' }, { name: 'Classification (Discrete)', value: 'classification' }]
 
+const COLORS = ['#e6194B', '#3cb44b', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#fabed4', '#469990', '#dcbeff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#a9a9a9']
+
 class NNWidget extends React.Component {
   constructor (props) {
     super(props)
 
-    const randojs = require('@nastyox/rando.js')
-    const rando = randojs.rando
-
     this.state = {
       activationFunction: ACTIVATION_FUNCTIONS[0],
+      classes: Array.from({ length: 40 }, () => COLORS[rando.rando(1)]),
       depth: false,
       layerData: Array(3).fill(2),
       loss: LOSSES[0],
       optimizer: OPTIMIZERS[0],
       problemType: PROBLEM_TYPES[0],
-      xData: Array.from({ length: 40 }, () => rando(0, 10, 'float')),
-      yData: Array.from({ length: 40 }, () => rando(0, 10, 'float')),
-      zData: Array.from({ length: 40 }, () => rando(0, 10, 'float'))
+      xData: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float')),
+      yData: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float')),
+      zData: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float'))
     }
 
     const model = createModel(this.state.layerData, this.state.activationFunction.value, 1, 1, this.state.loss.value, this.state.optimizer.value)
@@ -41,6 +42,11 @@ class NNWidget extends React.Component {
   }
 
   componentDidUpdate (_prevProps, prevState) {
+    if (prevState.depth !== this.state.depth ||
+        prevState.problemType.value !== this.state.problemType.value ||
+        prevState.classes !== this.state.classes) {
+      this.rebuildGraph()
+    }
     if (prevState.layerData !== this.state.layerData ||
         prevState.depth !== this.state.depth ||
         prevState.problemType !== this.state.problemType ||
@@ -48,9 +54,6 @@ class NNWidget extends React.Component {
         prevState.optimizer !== this.state.optimizer ||
         prevState.loss !== this.state.loss) {
       this.rebuildModel()
-      if (prevState.depth !== this.state.depth) {
-        this.rebuildGraph()
-      }
     }
   }
 
@@ -65,6 +68,9 @@ class NNWidget extends React.Component {
       data.z = this.state.zData
     } else {
       data.type = 'scatter'
+    }
+    if (this.state.problemType.value === 'classification') {
+      data.marker = { color: this.state.classes }
     }
     import('../ui/Graphing').then(graphing => {
       graphing.MLGraph('data-graph', [data])
@@ -145,6 +151,14 @@ class NNWidget extends React.Component {
             </Col>
             <Col>
               <h3>Problem Specs</h3>
+              <h5 disabled={this.state.problemType.value !== 'classification'}>
+                Classes: <input
+                  size={2}
+                  type='number'
+                  min={2}
+                  max={10}
+                  onChange={(e) => this.setState({ classes: Array.from({ length: 40 }, () => COLORS[rando.rando(e.target.value - 1)]) })}/>
+              </h5>
               <h5>2D <Switch
                 onChange={(change) => this.setState({ depth: change })}
                 checked={this.state.depth}
