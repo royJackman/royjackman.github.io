@@ -7,6 +7,7 @@ import '../ui/ui.css'
 import DropButton from '../ui/DropButton'
 import Switch from 'react-switch'
 import rando from '@nastyox/rando.js'
+import { cleanData } from '../ai/util'
 
 const ACTIVATION_FUNCTIONS = [{ name: 'ReLU', value: 'relu' }, { name: 'Sigmoid', value: 'sigmoid' }, { name: 'Softmax', value: 'softmax' }, { name: 'Softplus', value: 'softplus' }, { name: 'Softsign', value: 'softsign' }, { name: 'Tanh', value: 'tanh' }, { name: 'SeLU', value: 'selu' }, { name: 'ELU', value: 'elu' }]
 const LOSSES = [{ name: 'Hinge Loss', value: 'hinge' }, { name: 'Mean Squared Error', value: 'meanSquaredError' }]
@@ -21,7 +22,7 @@ class NNWidget extends React.Component {
 
     this.state = {
       activationFunction: ACTIVATION_FUNCTIONS[0],
-      classes: Array.from({ length: 40 }, () => COLORS[rando.rando(1)]),
+      classes: Array.from({ length: 40 }, () => rando.rando(1)),
       depth: false,
       layerData: Array(3).fill(2),
       loss: LOSSES[0],
@@ -31,6 +32,13 @@ class NNWidget extends React.Component {
       yData: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float')),
       zData: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float'))
     }
+
+    this.state.inputs = [this.state.xData]
+    this.state.outputs = [this.state.yData]
+
+    const cleanedData = cleanData(this.state.inputs, this.state.outputs)
+    this.state.tensorInput = cleanedData.inputs
+    this.state.tensorOutput = cleanedData.outputs
 
     const model = createModel(this.state.layerData, this.state.activationFunction.value, 1, 1, this.state.loss.value, this.state.optimizer.value)
     this.state.weights = model.getWeights()
@@ -54,7 +62,13 @@ class NNWidget extends React.Component {
         prevState.optimizer !== this.state.optimizer ||
         prevState.loss !== this.state.loss) {
       this.rebuildModel()
+      this.rebuildData()
     }
+  }
+
+  rebuildData () {
+    const { tIn, tOut } = cleanData(this.state.inputs, this.state.outputs)
+    this.setState({ tensorInput: tIn, tensorOutput: tOut })
   }
 
   rebuildGraph () {
@@ -70,7 +84,7 @@ class NNWidget extends React.Component {
       data.type = 'scatter'
     }
     if (this.state.problemType.value === 'classification') {
-      data.marker = { color: this.state.classes }
+      data.marker = { color: this.state.classes.map((v) => COLORS[v]) }
     }
     import('../ui/Graphing').then(graphing => {
       graphing.MLGraph('data-graph', [data])
@@ -78,9 +92,20 @@ class NNWidget extends React.Component {
   }
 
   rebuildModel () {
-    const inputSize = this.state.problemType.value === 'regression' ? (this.state.depth ? 2 : 1) : (this.state.depth ? 3 : 2)
-    const model = createModel(this.state.layerData, this.state.activationFunction.value, inputSize, 1, this.state.loss.value, this.state.optimizer.value)
-    this.setState({ weights: model.getWeights() })
+    let inputs, outputs
+    if (this.state.problemType.value === 'regression') {
+      inputs = [this.state.xData]
+      if (this.state.depth) {
+        inputs.push(this.state.yData)
+        outputs = [this.state.zData]
+      } else { outputs = [this.state.yData] }
+    } else if (this.state.problemType.value === 'classification') {
+      inputs = [this.state.xData, this.state.yData]
+      if (this.state.depth) { inputs.push(this.state.zData) }
+      outputs = [this.state.classes]
+    }
+    const model = createModel(this.state.layerData, this.state.activationFunction.value, inputs.length, 1, this.state.loss.value, this.state.optimizer.value)
+    this.setState({ inputs, outputs, weights: model.getWeights() })
     localNNSave(model, 'nn')
   }
 

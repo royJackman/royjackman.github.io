@@ -1,6 +1,30 @@
 import * as tf from '@tensorflow/tfjs'
 import * as _ from 'lodash'
 
+export function cleanData (inputs, outputs) {
+  return tf.tidy(() => {
+    const inputTensor = tf.tensor(inputs)
+    const outputTensor = tf.tensor(outputs)
+
+    const inputMax = inputTensor.max()
+    const inputMin = inputTensor.min()
+    const outputMax = outputTensor.max()
+    const outputMin = outputTensor.min()
+
+    const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin))
+    const normalizedOutputs = outputTensor.sub(outputMin).div(outputMax.sub(outputMin))
+
+    return {
+      inputs: normalizedInputs,
+      outputs: normalizedOutputs,
+      inputMax,
+      inputMin,
+      outputMax,
+      outputMin
+    }
+  })
+}
+
 export function getWeightBounds (weights) {
   const maxWeights = weights.map((val) => val.array().then((val) => Math.max(...val.flat())))
   const maxWeight = maxWeights.reduce((head, tail) => head.then((h) => tail.then((t) => h > t ? h : t)))
@@ -39,40 +63,20 @@ export async function generateData (ranges, numPoints, inputSize, outputSize, va
 }
 
 export function scrubData (data, vars, outputSize) {
-  return tf.tidy(() => {
-    const inputs = data.map(d => {
-      var retval = []
-      vars.forEach((v) => {
-        retval.push(d[v])
-      })
-      return retval
+  const inputs = data.map(d => {
+    var retval = []
+    vars.forEach((v) => {
+      retval.push(d[v])
     })
-    const outputs = data.map(d => {
-      var retval = []
-      for (var i = 0; i < outputSize; i++) {
-        retval.push(d['_' + i])
-      }
-      return retval
-    })
-
-    const inputTensor = tf.tensor(inputs)
-    const outputTensor = tf.tensor(outputs)
-
-    const inputMax = inputTensor.max()
-    const inputMin = inputTensor.min()
-    const outputMax = outputTensor.max()
-    const outputMin = outputTensor.min()
-
-    const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin))
-    const normalizedOutputs = outputTensor.sub(outputMin).div(outputMax.sub(outputMin))
-
-    return {
-      inputs: normalizedInputs,
-      outputs: normalizedOutputs,
-      inputMax,
-      inputMin,
-      outputMax,
-      outputMin
-    }
+    return retval
   })
+  const outputs = data.map(d => {
+    var retval = []
+    for (var i = 0; i < outputSize; i++) {
+      retval.push(d['_' + i])
+    }
+    return retval
+  })
+
+  return cleanData(inputs, outputs)
 }
