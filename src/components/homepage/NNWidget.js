@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Col, Row } from 'react-bootstrap'
 import NNGraph from '../ai/nn/NNGraph'
-import { createModel, localNNSave } from '../ai/nn/NeuralNetworks'
+import { createModel, localNNLoad, localNNSave, predictData } from '../ai/nn/NeuralNetworks'
 import Slider from '@material-ui/core/Slider'
 import '../ui/ui.css'
 import DropButton from '../ui/DropButton'
@@ -37,57 +37,72 @@ class NNWidget extends React.Component {
     this.state.outputs = [this.state.yData]
 
     const cleanedData = cleanData(this.state.inputs, this.state.outputs)
-    this.state.tensorInput = cleanedData.inputs
-    this.state.tensorOutput = cleanedData.outputs
+    this.state.tensorInput = cleanedData.inputs.transpose()
+    this.state.tensorOutput = cleanedData.outputs.transpose()
 
     const model = createModel(this.state.layerData, this.state.activationFunction.value, 1, 1, this.state.loss.value, this.state.optimizer.value)
     this.state.weights = model.getWeights()
-    localNNSave(model, 'nn')
+    localNNSave(model, 'nn').then(() => this.rebuildGraph())
   }
 
-  componentDidMount () {
-    this.rebuildGraph()
+  componentWillUnmount () {
+    localStorage.clear()
   }
 
   componentDidUpdate (_prevProps, prevState) {
-    if (prevState.depth !== this.state.depth ||
-        prevState.problemType.value !== this.state.problemType.value ||
-        prevState.classes !== this.state.classes) {
-      this.rebuildGraph()
-    }
     if (prevState.layerData !== this.state.layerData ||
         prevState.depth !== this.state.depth ||
         prevState.problemType !== this.state.problemType ||
         prevState.activationFunction !== this.state.activationFunction ||
         prevState.optimizer !== this.state.optimizer ||
-        prevState.loss !== this.state.loss) {
+        prevState.loss !== this.state.loss ||
+        prevState.classes !== this.state.classes) {
       this.rebuildModel()
       this.rebuildData()
+    }
+    if (prevState.depth !== this.state.depth ||
+        prevState.problemType.value !== this.state.problemType.value ||
+        prevState.classes !== this.state.classes) {
+      this.rebuildGraph()
     }
   }
 
   rebuildData () {
-    const { tIn, tOut } = cleanData(this.state.inputs, this.state.outputs)
-    this.setState({ tensorInput: tIn, tensorOutput: tOut })
+    const cleanedData = cleanData(this.state.inputs, this.state.outputs)
+    this.setState({ tensorInput: cleanedData.inputs.transpose(), tensorOutput: cleanedData.outputs.transpose() })
   }
 
-  rebuildGraph () {
+  async rebuildGraph () {
     const data = {
       x: this.state.xData,
       y: this.state.yData,
       mode: 'markers'
     }
+    const prediction = {
+      x: this.state.xData
+    }
+    const model = await localNNLoad('nn')
+    let outputPred
+    if (this.state.problemType.value === 'classification') {
+      data.marker = { color: this.state.classes.map((v) => COLORS[v]) }
+      outputPred = predictData(model, this.state.tensorInput).arraySync().map(e => Math.max(e))
+    } else if (this.state.problemType.value === 'regression') {
+      outputPred = predictData(model, this.state.tensorInput).arraySync().flat()
+    }
+
     if (this.state.depth) {
       data.type = 'scatter3d'
       data.z = this.state.zData
+      prediction.type = 'mesh3d'
+      prediction.y = this.state.yData
+      prediction.z = outputPred
     } else {
       data.type = 'scatter'
-    }
-    if (this.state.problemType.value === 'classification') {
-      data.marker = { color: this.state.classes.map((v) => COLORS[v]) }
+      prediction.type = 'lines'
+      prediction.y = outputPred
     }
     import('../ui/Graphing').then(graphing => {
-      graphing.MLGraph('data-graph', [data])
+      graphing.MLGraph('data-graph', [data, prediction])
     })
   }
 
@@ -176,13 +191,12 @@ class NNWidget extends React.Component {
             </Col>
             <Col>
               <h3>Problem Specs</h3>
-              <h5 disabled={this.state.problemType.value !== 'classification'}>
-                Classes: <input
-                  size={2}
-                  type='number'
-                  min={2}
-                  max={10}
-                  onChange={(e) => this.setState({ classes: Array.from({ length: 40 }, () => COLORS[rando.rando(e.target.value - 1)]) })}/>
+              <h5>Classes: <input
+                size={2}
+                type='number'
+                min={2}
+                max={10}
+                onChange={(e) => this.setState({ classes: Array.from({ length: 40 }, () => rando.rando(e.target.value - 1)) })}/>
               </h5>
               <h5>2D <Switch
                 onChange={(change) => this.setState({ depth: change })}
