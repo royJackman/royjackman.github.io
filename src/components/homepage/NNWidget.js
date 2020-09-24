@@ -24,7 +24,7 @@ class NNWidget extends React.Component {
       activationFunction: ACTIVATION_FUNCTIONS[0],
       classes: Array.from({ length: 40 }, () => rando.rando(1)),
       depth: false,
-      layerData: Array(3).fill(2),
+      layerData: Array(2).fill(3),
       loss: LOSSES[0],
       optimizer: OPTIMIZERS[0],
       problemType: PROBLEM_TYPES[0],
@@ -128,18 +128,18 @@ class NNWidget extends React.Component {
     return (
       <Container>
         <Col>
-          <Row style={{ height: '30vh' }} xs={1} md={2}>
+          <Row xs={1} md={2}>
             <Col>
-              <div className='box-30v margin-auto' style={{ height: '30vh' }}>
+              <div className='margin-auto' style={{ height: '30vh' }}>
                 <NNGraph weights={this.state.weights} />
               </div>
             </Col>
             <Col>
-              <div className='box-30v' id='data-graph' />
+              <div id='data-graph' style={{ height: '30vh' }}/>
             </Col>
           </Row>
-          <hr />
-          <Row sm={1} md={2} lg={3}>
+          <hr style={{ height: '1px', border: 'none', backgroundColor: '#333' }}/>
+          <Row md={1} lg={3}>
             <Col>
               <h3>Model Shape</h3>
               <h5>Hidden Layers: {this.state.layerData.length}</h5>
@@ -167,6 +167,7 @@ class NNWidget extends React.Component {
                       this.setState({ layerData: newLD })
                     }} /></span>
               })}
+              <hr className='vanishing'/>
             </Col>
             <Col>
               <h3>Learning Params</h3>
@@ -188,6 +189,7 @@ class NNWidget extends React.Component {
                 title={this.state.loss.name}
                 items={LOSSES}
                 onSelectHandler={(_ek, e) => this.setState({ loss: { name: e.target.innerHTML, value: e.target.value } })} />
+                <hr className='vanishing'/>
             </Col>
             <Col>
               <h3>Problem Specs</h3>
@@ -211,6 +213,7 @@ class NNWidget extends React.Component {
                 title={this.state.problemType.name}
                 items={PROBLEM_TYPES}
                 onSelectHandler={(_ek, e) => this.setState({ problemType: { name: e.target.innerHTML, value: e.target.value } })} />
+              <hr className='vanishing'/>
             </Col>
           </Row>
         </Col>

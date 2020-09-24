@@ -8,7 +8,8 @@ export function MLGraph (elemId, data) {
       paper_bgcolor: 'rgba(0, 0, 0, 0)',
       plot_bgcolor: 'rgba(0, 0, 0, 0)',
       xaxis: { gridcolor: 'black' },
-      yaxis: { gridcolor: 'black' }
+      yaxis: { gridcolor: 'black' },
+      showlegend: false
     },
     { responsive: true }
   )
