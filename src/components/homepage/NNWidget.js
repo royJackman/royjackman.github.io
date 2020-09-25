@@ -139,7 +139,7 @@ class NNWidget extends React.Component {
             </Col>
           </Row>
           <hr style={{ height: '1px', border: 'none', backgroundColor: '#333' }}/>
-          <Row md={1} lg={3}>
+          <Row xs={1} lg={3}>
             <Col>
               <h3>Model Shape</h3>
               <h5>Hidden Layers: {this.state.layerData.length}</h5>
@@ -189,7 +189,7 @@ class NNWidget extends React.Component {
                 title={this.state.loss.name}
                 items={LOSSES}
                 onSelectHandler={(_ek, e) => this.setState({ loss: { name: e.target.innerHTML, value: e.target.value } })} />
-                <hr className='vanishing'/>
+              <hr className='vanishing'/>
             </Col>
             <Col>
               <h3>Problem Specs</h3>
