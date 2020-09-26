@@ -68,8 +68,7 @@ class NNWidget extends React.Component {
     }
     if (prevState.x !== this.state.x ||
         prevState.y !== this.state.y ||
-        prevState.z !== this.state.z ||
-        prevState.outputs !== this.state.outputs) {
+        prevState.z !== this.state.z) {
       this.rebuildData()
       this.rebuildGraph()
     }
@@ -228,7 +227,7 @@ class NNWidget extends React.Component {
                 title={this.state.problemType.name}
                 items={PROBLEM_TYPES}
                 onSelectHandler={(_ek, e) => this.setState({ problemType: { name: e.target.innerHTML, value: e.target.value } })} />
-              <h5>Function: <input
+              <h5>f({['x', 'y', 'z'].splice(0, this.state.inputs.length).join(', ')}): <input
                 onChange={(e) => this.regenerateData(e.target.value)}/>
               </h5>
               <hr className='vanishing'/>

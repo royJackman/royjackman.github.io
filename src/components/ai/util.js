@@ -66,11 +66,6 @@ export async function generateData (ranges, numPoints, inputSize, outputSize, va
   return retval
 }
 
-export function linspace (start, end, items) {
-  const scale = (end - start) / items
-  return Array.from({ length: items }, (_x, i) => start + i * scale)
-}
-
 export function generateFuncData (func, inputs, ranges, numPoints, random = false, noise = 0.0, outKey = null) {
   if (ranges.length !== inputs) {
     console.log('Number of ranges does not match number of inputs!')
@@ -87,13 +82,12 @@ export function generateFuncData (func, inputs, ranges, numPoints, random = fals
 
   const retval = {}
 
-  let i = 0
-  for (i = 0; i < inputs; i++) {
+  for (let i = 0; i < inputs; i++) {
     retval[INPUTS[i]] = random ? Array.from({ length: numPoints }, () => rando.rando(ranges[i][0], ranges[i][1], 'float')) : linspace(ranges[i][0], ranges[i][1], numPoints)
   }
 
   const outputs = []
-  for (i = 0; i < numPoints; i++) {
+  for (let i = 0; i < numPoints; i++) {
     const scope = {}
     for (const r in retval) {
       scope[r] = retval[r][i]
@@ -108,6 +102,11 @@ export function generateFuncData (func, inputs, ranges, numPoints, random = fals
   retval[outKey || 'outputs'] = outputs
 
   return retval
+}
+
+export function linspace (start, end, items) {
+  const scale = (end - start) / items
+  return Array.from({ length: items }, (_x, i) => start + i * scale)
 }
 
 export function scrubData (data, vars, outputSize) {
