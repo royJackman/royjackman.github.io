@@ -1,5 +1,9 @@
 import * as tf from '@tensorflow/tfjs'
 import * as _ from 'lodash'
+import * as math from 'mathjs'
+import rando from '@nastyox/rando.js'
+
+const INPUTS = ['x', 'y', 'z']
 
 export function cleanData (inputs, outputs) {
   return tf.tidy(() => {
@@ -59,6 +63,50 @@ export async function generateData (ranges, numPoints, inputSize, outputSize, va
   if (illegal.length > 0) {
     alert('The following functions are using illegal values! ' + illegal)
   }
+  return retval
+}
+
+export function linspace (start, end, items) {
+  const scale = (end - start) / items
+  return Array.from({ length: items }, (_x, i) => start + i * scale)
+}
+
+export function generateFuncData (func, inputs, ranges, numPoints, random = false, noise = 0.0, outKey = null) {
+  if (ranges.length !== inputs) {
+    console.log('Number of ranges does not match number of inputs!')
+    return null
+  }
+
+  let compFunc
+
+  try {
+    compFunc = math.compile(func)
+  } catch (e) {
+    return null
+  }
+
+  const retval = {}
+
+  let i = 0
+  for (i = 0; i < inputs; i++) {
+    retval[INPUTS[i]] = random ? Array.from({ length: numPoints }, () => rando.rando(ranges[i][0], ranges[i][1], 'float')) : linspace(ranges[i][0], ranges[i][1], numPoints)
+  }
+
+  const outputs = []
+  for (i = 0; i < numPoints; i++) {
+    const scope = {}
+    for (const r in retval) {
+      scope[r] = retval[r][i]
+    }
+    try {
+      outputs.push(compFunc.evaluate(scope) + rando.rando() * noise)
+    } catch (e) {
+      return null
+    }
+  }
+
+  retval[outKey || 'outputs'] = outputs
+
   return retval
 }
 

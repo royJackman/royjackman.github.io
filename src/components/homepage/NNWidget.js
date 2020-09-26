@@ -7,7 +7,7 @@ import '../ui/ui.css'
 import DropButton from '../ui/DropButton'
 import Switch from 'react-switch'
 import rando from '@nastyox/rando.js'
-import { cleanData } from '../ai/util'
+import { cleanData, generateFuncData } from '../ai/util'
 
 const ACTIVATION_FUNCTIONS = [{ name: 'ReLU', value: 'relu' }, { name: 'Sigmoid', value: 'sigmoid' }, { name: 'Softmax', value: 'softmax' }, { name: 'Softplus', value: 'softplus' }, { name: 'Softsign', value: 'softsign' }, { name: 'Tanh', value: 'tanh' }, { name: 'SeLU', value: 'selu' }, { name: 'ELU', value: 'elu' }]
 const LOSSES = [{ name: 'Hinge Loss', value: 'hinge' }, { name: 'Mean Squared Error', value: 'meanSquaredError' }]
@@ -26,15 +26,16 @@ class NNWidget extends React.Component {
       depth: false,
       layerData: Array(2).fill(3),
       loss: LOSSES[0],
+      numPoints: 50,
       optimizer: OPTIMIZERS[0],
       problemType: PROBLEM_TYPES[0],
-      xData: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float')),
-      yData: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float')),
-      zData: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float'))
+      x: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float')),
+      y: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float')),
+      z: Array.from({ length: 40 }, () => rando.rando(0, 10, 'float'))
     }
 
-    this.state.inputs = [this.state.xData]
-    this.state.outputs = [this.state.yData]
+    this.state.inputs = [this.state.x]
+    this.state.outputs = [this.state.y]
 
     const cleanedData = cleanData(this.state.inputs, this.state.outputs)
     this.state.tensorInput = cleanedData.inputs.transpose()
@@ -65,6 +66,13 @@ class NNWidget extends React.Component {
         prevState.classes !== this.state.classes) {
       this.rebuildGraph()
     }
+    if (prevState.x !== this.state.x ||
+        prevState.y !== this.state.y ||
+        prevState.z !== this.state.z ||
+        prevState.outputs !== this.state.outputs) {
+      this.rebuildData()
+      this.rebuildGraph()
+    }
   }
 
   rebuildData () {
@@ -74,12 +82,12 @@ class NNWidget extends React.Component {
 
   async rebuildGraph () {
     const data = {
-      x: this.state.xData,
-      y: this.state.yData,
+      x: this.state.x,
+      y: this.state.y,
       mode: 'markers'
     }
     const prediction = {
-      x: this.state.xData
+      x: this.state.x
     }
     const model = await localNNLoad('nn')
     let outputPred
@@ -92,9 +100,9 @@ class NNWidget extends React.Component {
 
     if (this.state.depth) {
       data.type = 'scatter3d'
-      data.z = this.state.zData
+      data.z = this.state.z
       prediction.type = 'mesh3d'
-      prediction.y = this.state.yData
+      prediction.y = this.state.y
       prediction.z = outputPred
     } else {
       data.type = 'scatter'
@@ -109,19 +117,26 @@ class NNWidget extends React.Component {
   rebuildModel () {
     let inputs, outputs
     if (this.state.problemType.value === 'regression') {
-      inputs = [this.state.xData]
+      inputs = [this.state.x]
       if (this.state.depth) {
-        inputs.push(this.state.yData)
-        outputs = [this.state.zData]
-      } else { outputs = [this.state.yData] }
+        inputs.push(this.state.y)
+        outputs = [this.state.z]
+      } else { outputs = [this.state.y] }
     } else if (this.state.problemType.value === 'classification') {
-      inputs = [this.state.xData, this.state.yData]
-      if (this.state.depth) { inputs.push(this.state.zData) }
+      inputs = [this.state.x, this.state.y]
+      if (this.state.depth) { inputs.push(this.state.z) }
       outputs = [this.state.classes]
     }
     const model = createModel(this.state.layerData, this.state.activationFunction.value, inputs.length, 1, this.state.loss.value, this.state.optimizer.value)
     this.setState({ inputs, outputs, weights: model.getWeights() })
     localNNSave(model, 'nn')
+  }
+
+  regenerateData (func, ranges = Array.from({ length: this.state.inputs.length }, () => [-5, 5])) {
+    const funcData = generateFuncData(func, this.state.inputs.length, ranges, this.state.numPoints, false, 0.0, this.state.depth ? 'z' : 'y')
+    if (funcData !== null) {
+      this.setState(funcData)
+    }
   }
 
   render () {
@@ -213,6 +228,9 @@ class NNWidget extends React.Component {
                 title={this.state.problemType.name}
                 items={PROBLEM_TYPES}
                 onSelectHandler={(_ek, e) => this.setState({ problemType: { name: e.target.innerHTML, value: e.target.value } })} />
+              <h5>Function: <input
+                onChange={(e) => this.regenerateData(e.target.value)}/>
+              </h5>
               <hr className='vanishing'/>
             </Col>
           </Row>
