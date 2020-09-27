@@ -59,17 +59,25 @@ class NNWidget extends React.Component {
         prevState.loss !== this.state.loss ||
         prevState.classes !== this.state.classes) {
       this.rebuildModel()
+    }
+    if (prevState.layerData !== this.state.layerData ||
+        prevState.depth !== this.state.depth ||
+        prevState.problemType !== this.state.problemType ||
+        prevState.activationFunction !== this.state.activationFunction ||
+        prevState.optimizer !== this.state.optimizer ||
+        prevState.loss !== this.state.loss ||
+        prevState.classes !== this.state.classes ||
+        prevState.x !== this.state.x ||
+        prevState.y !== this.state.y ||
+        prevState.z !== this.state.z) {
       this.rebuildData()
     }
     if (prevState.depth !== this.state.depth ||
         prevState.problemType.value !== this.state.problemType.value ||
-        prevState.classes !== this.state.classes) {
-      this.rebuildGraph()
-    }
-    if (prevState.x !== this.state.x ||
+        prevState.classes !== this.state.classes ||
+        prevState.x !== this.state.x ||
         prevState.y !== this.state.y ||
         prevState.z !== this.state.z) {
-      this.rebuildData()
       this.rebuildGraph()
     }
   }
