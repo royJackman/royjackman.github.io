@@ -139,7 +139,7 @@ class NNWidget extends React.Component {
     localNNSave(model, 'nn')
   }
 
-  regenerateData (func, ranges = Array.from({ length: this.state.inputs.length }, () => [-5, 5])) {
+  regenerateData (func = 'broken', ranges = Array.from({ length: this.state.inputs.length }, () => [-5, 5])) {
     const funcData = generateFuncData(func, this.state.inputs.length, ranges, this.state.numPoints, false, 0.0, this.state.depth ? 'z' : 'y')
     if (funcData !== null) {
       this.setState(funcData)
