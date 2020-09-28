@@ -5,6 +5,24 @@ import rando from '@nastyox/rando.js'
 
 const INPUTS = ['x', 'y', 'z']
 
+function pointSplitter (numPoints, numGroups, min = 2, even = false) {
+  if (even) {
+    const retval = Array(numGroups).fill(Math.floor(numPoints / numGroups))
+    for (let i = 0; i < numPoints % numGroups; i++) retval[i] += 1
+    return retval
+  } else {
+    const retval = Array(numGroups).fill(min)
+    numPoints -= numGroups * min
+    while (numGroups > 1) {
+      retval.push(rando.rando(1, numPoints))
+      numPoints -= retval.slice(-1)[0]
+      numGroups -= 1
+    }
+    retval.push(numPoints)
+    return retval
+  }
+}
+
 export function cleanData (inputs, outputs) {
   return tf.tidy(() => {
     const inputTensor = tf.tensor(inputs)
@@ -67,7 +85,7 @@ export async function generateData (ranges, numPoints, inputSize, outputSize, va
 }
 
 export function generateFuncData (func, inputs, ranges, numPoints, random = false, noise = 0.0, outKey = null) {
-  if (ranges.length !== inputs) {
+  if (ranges.length < inputs) {
     console.log('Number of ranges does not match number of inputs!')
     return null
   }
@@ -101,6 +119,32 @@ export function generateFuncData (func, inputs, ranges, numPoints, random = fals
 
   retval[outKey || 'outputs'] = outputs
 
+  return retval
+}
+
+export function generateLocusData (loci, depth, ranges, numPoints, noise = 1.0) {
+  if ((depth && ranges.length < 3) || (!depth && ranges.length < 2)) {
+    console.log('Number of ranges does not match number of inputs!')
+    return null
+  }
+
+  if (typeof loci === 'number') {
+    loci = Array.from({ length: loci }, () => Array.from({ length: depth ? 3 : 2 }, (_v, i) => rando.rando(ranges[i][0], ranges[i][1], 'float')))
+  }
+
+  const splits = pointSplitter(numPoints, loci.length, 5, true)
+  const x = []; const y = []; const z = []; const classes = []
+  for (let i = 0; i < loci.length; i++) {
+    for (let j = 0; j < splits[i]; j++) {
+      x.push(loci[i][0] + noise * rando.rando())
+      y.push(loci[i][1] + noise * rando.rando())
+      if (depth) z.push(loci[i][2] + noise * rando.rando())
+      classes.push(i)
+    }
+  }
+
+  const retval = { x, y, classes }
+  if (depth) retval.z = z
   return retval
 }
 
