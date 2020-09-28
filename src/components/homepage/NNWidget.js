@@ -7,7 +7,7 @@ import '../ui/ui.css'
 import DropButton from '../ui/DropButton'
 import Switch from 'react-switch'
 import rando from '@nastyox/rando.js'
-import { cleanData, generateFuncData, generateLocusData } from '../ai/util'
+import { cleanData, generateFuncData, generateLocusData, linspace } from '../ai/util'
 
 const ACTIVATION_FUNCTIONS = [{ name: 'ReLU', value: 'relu' }, { name: 'Sigmoid', value: 'sigmoid' }, { name: 'Softmax', value: 'softmax' }, { name: 'Softplus', value: 'softplus' }, { name: 'Softsign', value: 'softsign' }, { name: 'Tanh', value: 'tanh' }, { name: 'SeLU', value: 'selu' }, { name: 'ELU', value: 'elu' }]
 const LOSSES = [{ name: 'Hinge Loss', value: 'hinge' }, { name: 'Mean Squared Error', value: 'meanSquaredError' }]
@@ -22,7 +22,7 @@ class NNWidget extends React.Component {
 
     this.state = {
       activationFunction: ACTIVATION_FUNCTIONS[0],
-      classes: Array.from({ length: 50 }, () => rando.rando(1)),
+      classes: Array(25).fill(0).concat(Array(25).fill(1)),
       depth: false,
       func: 'x',
       layerData: Array(2).fill(3),
@@ -32,9 +32,9 @@ class NNWidget extends React.Component {
       optimizer: OPTIMIZERS[0],
       problemType: PROBLEM_TYPES[0],
       ranges: [[-5, 5], [-5, 5], [-5, 5]],
-      x: Array.from({ length: 50 }, () => rando.rando(0, 10, 'float')),
-      y: Array.from({ length: 50 }, () => rando.rando(0, 10, 'float')),
-      z: Array.from({ length: 50 }, () => rando.rando(0, 10, 'float'))
+      x: linspace(-5, 5, 50),
+      y: linspace(-5, 5, 50),
+      z: linspace(-5, 5, 50)
     }
 
     this.state.inputs = [this.state.x]
