@@ -56,7 +56,8 @@ class NNWidget extends React.Component {
   componentDidUpdate (_prevProps, prevState) {
     const changed = key => prevState[key] !== this.state[key]
 
-    if (changed('func') || changed('loci') || changed('depth') || changed('ranges') || changed('numPoints')) {
+    if (changed('func') || changed('loci') || changed('depth') || changed('ranges') || 
+        changed('numPoints') || changed('problemType')) {
       this.regenerateData()
     }
     if (changed('value') || changed('x') || changed('y') || changed('z') ||
@@ -88,11 +89,13 @@ class NNWidget extends React.Component {
 
   async rebuildGraph () {
     const data = {
+      name: 'Data',
       x: this.state.x,
       y: this.state.y,
       mode: 'markers'
     }
     const prediction = {
+      name: 'Prediction',
       x: this.state.x
     }
     const model = await localNNLoad('nn')
