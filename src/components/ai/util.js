@@ -39,10 +39,10 @@ export function cleanData (inputs, outputs) {
     return {
       inputs: normalizedInputs,
       outputs: normalizedOutputs,
-      inputMax,
-      inputMin,
-      outputMax,
-      outputMin
+      inputMax: inputMax.arraySync(),
+      inputMin: inputMin.arraySync(),
+      outputMax: outputMax.arraySync(),
+      outputMin: outputMin.arraySync()
     }
   })
 }

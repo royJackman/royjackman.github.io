@@ -6,7 +6,6 @@ import Slider from '@material-ui/core/Slider'
 import '../ui/ui.css'
 import DropButton from '../ui/DropButton'
 import Switch from 'react-switch'
-import rando from '@nastyox/rando.js'
 import { cleanData, generateFuncData, generateLocusData, linspace } from '../ai/util'
 
 const ACTIVATION_FUNCTIONS = [{ name: 'ReLU', value: 'relu' }, { name: 'Sigmoid', value: 'sigmoid' }, { name: 'Softmax', value: 'softmax' }, { name: 'Softplus', value: 'softplus' }, { name: 'Softsign', value: 'softsign' }, { name: 'Tanh', value: 'tanh' }, { name: 'SeLU', value: 'selu' }, { name: 'ELU', value: 'elu' }]
@@ -43,6 +42,8 @@ class NNWidget extends React.Component {
     const cleanedData = cleanData(this.state.inputs, this.state.outputs)
     this.state.tensorInput = cleanedData.inputs.transpose()
     this.state.tensorOutput = cleanedData.outputs.transpose()
+    this.state.outputMin = cleanedData.outputMin
+    this.state.outputMax = cleanedData.outputMax
 
     const model = createModel(this.state.layerData, this.state.activationFunction.value, 1, 1, this.state.loss.value, this.state.optimizer.value)
     this.state.weights = model.getWeights()
@@ -56,7 +57,7 @@ class NNWidget extends React.Component {
   componentDidUpdate (_prevProps, prevState) {
     const changed = key => prevState[key] !== this.state[key]
 
-    if (changed('func') || changed('loci') || changed('depth') || changed('ranges') || 
+    if (changed('func') || changed('loci') || changed('depth') || changed('ranges') ||
         changed('numPoints') || changed('problemType')) {
       this.regenerateData()
     }
@@ -84,7 +85,7 @@ class NNWidget extends React.Component {
       outputs = [this.state.classes]
     }
     const cleanedData = cleanData(inputs, outputs)
-    this.setState({ inputs, outputs, tensorInput: cleanedData.inputs.transpose(), tensorOutput: cleanedData.outputs.transpose() })
+    this.setState({ inputs, outputs, outputMin: cleanedData.outputMin, outputMax: cleanedData.outputMax, tensorInput: cleanedData.inputs.transpose(), tensorOutput: cleanedData.outputs.transpose() })
   }
 
   async rebuildGraph () {
@@ -106,6 +107,8 @@ class NNWidget extends React.Component {
     } else if (this.state.problemType.value === 'regression') {
       outputPred = predictData(model, this.state.tensorInput).arraySync().flat()
     }
+
+    outputPred = outputPred.map((item) => (item * (this.state.outputMax - this.state.outputMin)) + this.state.outputMin)
 
     if (this.state.depth) {
       data.type = 'scatter3d'
@@ -207,13 +210,6 @@ class NNWidget extends React.Component {
             </Col>
             <Col>
               <h3>Problem Specs</h3>
-              <h5>Classes: <input
-                size={2}
-                type='number'
-                min={2}
-                max={10}
-                onChange={(e) => this.setState({ classes: Array.from({ length: 40 }, () => rando.rando(e.target.value - 1)) })}/>
-              </h5>
               <h5>2D <Switch
                 onChange={(change) => this.setState({ depth: change })}
                 checked={this.state.depth}
