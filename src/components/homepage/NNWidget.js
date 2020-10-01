@@ -158,6 +158,53 @@ class NNWidget extends React.Component {
           <hr style={{ height: '1px', border: 'none', backgroundColor: '#333' }}/>
           <Row xs={1} lg={3}>
             <Col>
+              <h3>Problem Specs</h3>
+              <h5>2D <Switch
+                onChange={(change) => this.setState({ depth: change })}
+                checked={this.state.depth}
+                checkedIcon={false} uncheckedIcon={false}
+                onColor='#a3f025' offColor='#1212aa'
+                height={16}
+              /> 3D</h5>
+              <h5>Problem Type</h5>
+              <DropButton
+                id='problem-type'
+                title={this.state.problemType.name}
+                items={PROBLEM_TYPES}
+                onSelectHandler={(_ek, e) => this.setState({ problemType: { name: e.target.innerHTML, value: e.target.value } })} />
+              <div className='padding-15'>{this.state.problemType.value === 'regression'
+                ? <h5>f({['x', 'y', 'z'].splice(0, this.state.inputs.length).join(', ')}): <input value={this.state.func}
+                  onChange={(e) => this.setState({ func: e.target.value })}/>
+                </h5>
+                : <h5>Loci: <input type='number' min={2} max={10} value={this.state.loci}
+                  onChange={(e) => this.setState({ loci: parseInt(e.target.value) }) }/>
+                </h5>
+              }</div>
+              <hr className='vanishing'/>
+            </Col>
+            <Col>
+              <h3>Learning Params</h3>
+              <h5>Activation Function</h5>
+              <DropButton
+                id='activation-function'
+                title={this.state.activationFunction.name}
+                items={ACTIVATION_FUNCTIONS}
+                onSelectHandler={(_ek, e) => this.setState({ activationFunction: { name: e.target.innerHTML, value: e.target.value } })} />
+              <h5>Optimizer</h5>
+              <DropButton
+                id='optimizer'
+                title={this.state.optimizer.name}
+                items={OPTIMIZERS}
+                onSelectHandler={(_ek, e) => this.setState({ optimizer: { name: e.target.innerHTML, value: e.target.value } })} />
+              <h5>Loss</h5>
+              <DropButton
+                id='optimizer'
+                title={this.state.loss.name}
+                items={LOSSES}
+                onSelectHandler={(_ek, e) => this.setState({ loss: { name: e.target.innerHTML, value: e.target.value } })} />
+              <hr className='vanishing'/>
+            </Col>
+            <Col>
               <h3>Model Shape</h3>
               <h5>Hidden Layers: {this.state.layerData.length}</h5>
               <Slider
@@ -184,53 +231,6 @@ class NNWidget extends React.Component {
                       this.setState({ layerData: newLD })
                     }} /></span>
               })}
-              <hr className='vanishing'/>
-            </Col>
-            <Col>
-              <h3>Learning Params</h3>
-              <h5>Activation Function</h5>
-              <DropButton
-                id='activation-function'
-                title={this.state.activationFunction.name}
-                items={ACTIVATION_FUNCTIONS}
-                onSelectHandler={(_ek, e) => this.setState({ activationFunction: { name: e.target.innerHTML, value: e.target.value } })} />
-              <h5>Optimizer</h5>
-              <DropButton
-                id='optimizer'
-                title={this.state.optimizer.name}
-                items={OPTIMIZERS}
-                onSelectHandler={(_ek, e) => this.setState({ optimizer: { name: e.target.innerHTML, value: e.target.value } })} />
-              <h5>Loss</h5>
-              <DropButton
-                id='optimizer'
-                title={this.state.loss.name}
-                items={LOSSES}
-                onSelectHandler={(_ek, e) => this.setState({ loss: { name: e.target.innerHTML, value: e.target.value } })} />
-              <hr className='vanishing'/>
-            </Col>
-            <Col>
-              <h3>Problem Specs</h3>
-              <h5>2D <Switch
-                onChange={(change) => this.setState({ depth: change })}
-                checked={this.state.depth}
-                checkedIcon={false} uncheckedIcon={false}
-                onColor='#a3f025' offColor='#1212aa'
-                height={16}
-              /> 3D</h5>
-              <h5>Problem Type</h5>
-              <DropButton
-                id='problem-type'
-                title={this.state.problemType.name}
-                items={PROBLEM_TYPES}
-                onSelectHandler={(_ek, e) => this.setState({ problemType: { name: e.target.innerHTML, value: e.target.value } })} />
-              {this.state.problemType.value === 'regression'
-                ? <h5>f({['x', 'y', 'z'].splice(0, this.state.inputs.length).join(', ')}): <input value={this.state.func}
-                  onChange={(e) => this.setState({ func: e.target.value })}/>
-                </h5>
-                : <h5>Loci: <input type='number' min={2} max={10} value={this.state.loci}
-                  onChange={(e) => this.setState({ loci: parseInt(e.target.value) }) }/>
-                </h5>
-              }
               <hr className='vanishing'/>
             </Col>
           </Row>
