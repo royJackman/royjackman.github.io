@@ -1,6 +1,6 @@
 {
-  "short_name": "Roy Jackman",
-  "name": "Personal website of Roy Jackman",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
