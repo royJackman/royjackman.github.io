@@ -24,6 +24,8 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -53,11 +55,13 @@
     "@typescript-eslint/parser": "^5.59.0",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
+    "gh-pages": "^5.0.0",
     "prettier": "^2.8.7"
   },
   "description": "My website!",
   "main": "index.tsx",
   "repository": "https://github.com/royJackman/royjackman.github.io.git",
   "author": "jackman.roy@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://royJackman.github.io"
 }
