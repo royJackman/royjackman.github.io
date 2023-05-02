@@ -10,7 +10,7 @@ export const experiences = [
         position: "Cofounder & Lead Full Stack Engineer",
         company: "HeuriTrade, LLC",
         location: "Remote",
-        startDate: new Date(2022, 5),
+        startDate: new Date(2022, 1),
         logo: {
             alt: 'HeuriTrade, LLC.',
             src: String(HTLogo),
@@ -40,6 +40,7 @@ export const experiences = [
         company: "IBM/Sevone",
         location: "Remote",
         startDate: new Date(2021, 4),
+        endDate: new Date(2023, 4),
         logo: {
             alt: 'SevOne',
             src: String(SevoneLogo),
@@ -61,12 +62,12 @@ export const experiences = [
     },
     {
         position: "Research Assistant",
-        company: "BINDS lab",
+        company: "BINDS lab remote",
         location: "Amherst, MA",
         startDate: new Date(2020, 5),
         endDate: new Date(2021, 4),
         logo: {
-            alt: 'BINDS',
+            alt: 'BINDSRemote',
             src: String(BINDSLogo),
         },
         bullets: [
@@ -108,12 +109,12 @@ export const experiences = [
     },
     {
         position: "Research Assistant",
-        company: "BINDS lab",
+        company: "BINDS lab at Amherst",
         location: "Amherst, MA",
         startDate: new Date(2016, 11),
         endDate: new Date(2019, 5),
         logo: {
-            alt: 'BINDS',
+            alt: 'BINDSAmherst',
             src: String(BINDSLogo),
         },
         bullets: [

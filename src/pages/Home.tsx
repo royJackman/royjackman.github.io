@@ -1,10 +1,38 @@
 import React from 'react';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineOppositeContent, TimelineSeparator, timelineOppositeContentClasses } from '@mui/lab';
-import {Avatar, Card, CardContent, CardHeader, List, ListItem, Stack, Typography} from '@mui/material';
+import {
+    Avatar,
+    Card,
+    CardContent,
+    CardHeader,
+    Collapse,
+    Drawer,
+    FormControl,
+    InputLabel,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    ListSubheader,
+    MenuItem,
+    Select,
+    Stack,
+    Typography,
+    useMediaQuery,
+    useTheme
+} from '@mui/material';
 import { animated, config, useSpring } from '@react-spring/web';
 import * as icon from '../ui/icons';
 import { experiences } from '../assets/text';
+
+type SortType = 'alphabetical' | 'stack' | 'environment' | 'tool' | 'time' | 'loc';
+
+const tags = {
+    stack: ['Frontend', 'Midtier', 'Backend', 'Gamedev', 'ORM', 'Devops'],
+    environment: ['Professional', 'Educational', 'Personal'],
+    tool: ['Language', 'Framework', 'VCS']
+};
 
 type WorkExperienceType = {
     position: string,
@@ -12,7 +40,10 @@ type WorkExperienceType = {
     location: string,
     startDate: Date,
     endDate?: Date,
-    logo?: icon.ImageDataType,
+    logo?: {
+        alt: string,
+        src: string,
+    },
     bullets: string[],
     tools: icon.ImageDataType[],
 };
@@ -104,7 +135,7 @@ const ExperienceCard = (props: ExperienceCardPropsType) => {
                         <List sx={{listStyleType: 'disc', pl: 4}}>
                             {exp.bullets.map(bullet => {
                                 return (
-                                    <ListItem key={bullet[0]} sx={{display: 'list-item'}}>{bullet}</ListItem>
+                                    <ListItem key={bullet.slice(0, 19)} sx={{display: 'list-item'}}>{bullet}</ListItem>
                                 )
                             })}
                         </List>
@@ -132,14 +163,158 @@ const TimelineItems = () => {
 }
 
 const Home = () => {
+    const [toolsExpanded, setToolsExpanded] = React.useState(false);
+    const [sort, setSort] = React.useState<SortType>('alphabetical');
+
+    const toolItem = (tool: icon.ImageDataType) => {
+        return <ListItem
+            key={tool.alt}
+            onClick={() => setToolsExpanded(!toolsExpanded)}>
+            <ListItemIcon>
+                <Avatar
+                    src={tool.src}
+                    alt={tool.alt}
+                    variant={'rounded'}/>
+            </ListItemIcon>
+            <ListItemText primary={tool.alt} sx={{maxWidth: '16ch'}} />
+        </ListItem>
+    };
+
+    const theme = useTheme();
+    const mediumUp = useMediaQuery(theme.breakpoints.up('md'));
+
+    const sortedIconsDict: {
+        headers: string[],
+        groups: icon.ImageDataType[][]
+    } = React.useMemo(() => {
+        const extracted = Object.values(icon);
+        switch(sort) {
+            case 'alphabetical':
+                return {
+                    headers: [],
+                    groups: [extracted.sort()]
+                };
+            case 'environment':
+                return {
+                    headers: tags.environment,
+                    groups: tags.environment.map((tag) => {
+                        return extracted.filter((i) => i.tags.includes(tag.toLowerCase())).sort()
+                    })
+                };
+            case 'stack':
+                return {
+                    headers: tags.stack,
+                    groups: tags.stack.map((tag) => {
+                        return extracted.filter((i) => i.tags.includes(tag.toLowerCase())).sort()
+                    })
+                };
+            case 'tool':
+                return {
+                    headers: tags.tool,
+                    groups: tags.tool.map((tag) => {
+                        return extracted.filter((i) => i.tags.includes(tag.toLowerCase())).sort()
+                    })
+                };
+            case 'loc':
+                return {
+                    headers: ['> 5000', '> 1000', '< 1000'],
+                    groups: [
+                        extracted.filter((e) => e.linesOfCode > 5000).sort((a, b) => b.linesOfCode - a.linesOfCode),
+                        extracted.filter((e) => e.linesOfCode > 1000 && e.linesOfCode <= 5000).sort((a, b) => b.linesOfCode - a.linesOfCode),
+                        extracted.filter((e) => e.linesOfCode <= 1000).sort((a, b) => b.linesOfCode - a.linesOfCode)
+                    ]
+                }
+            case 'time':
+                return {
+                    headers: ['> 5 years', '> 1 year', '< 1 year'],
+                    groups: [
+                        extracted.filter((e) => e.timeKnown.years >= 5).sort((a, b) => b.timeKnown.toMillis() - a.timeKnown.toMillis()),
+                        extracted.filter((e) => e.timeKnown.years >= 1 && e.timeKnown.years < 5).sort((a, b) => b.timeKnown.toMillis() - a.timeKnown.toMillis()),
+                        extracted.filter((e) => e.timeKnown.years < 1).sort((a, b) => b.timeKnown.toMillis() - a.timeKnown.toMillis())
+                    ]
+                }
+            default:
+                return {
+                    headers: [],
+                    groups: [],
+                };
+        }
+    }, [sort]);
+
     return (
-        <Grid2 container spacing={2}>
-            <Grid2 xs={0} sm={1} md={2}/>
-            <Grid2 xs={12} sm={10} md={8}>
-                <TimelineItems />
+        <>
+            <Grid2 container spacing={2}>
+                <Grid2 xs={0} sm={1} md={2}/>
+                <Grid2 xs={12} sm={10} md={8}>
+                    <TimelineItems />
+                </Grid2>
+                <Grid2 xs={0} sm={1} md={2}/>
             </Grid2>
-            <Grid2 xs={0} sm={1} md={2}/>
-        </Grid2>
+            {mediumUp && <Drawer
+                anchor={'right'}
+                open={true}
+                variant={'permanent'}>
+                <List sx={{backgroundColor: '#3C3836'}}>
+                    <Collapse
+                        key={'Collapser'}
+                        orientation={'horizontal'}
+                        in={toolsExpanded}
+                        collapsedSize={72}
+                    >
+                        <ListItem key={'header'} sx={{
+                            justifyContent: 'start',
+                            padding: [1, 'auto']
+                        }}>
+                            Toolbox
+                        </ListItem>
+                        <Collapse
+                            key={'MiniCollapser'}
+                            in={toolsExpanded}
+                        >
+                            <ListItem key={'DropDown'}>
+                                <FormControl>
+                                    <InputLabel>Sort by:</InputLabel>
+                                    <Select
+                                        value={sort}
+                                        label={'Sort by'}
+                                        onChange={(event) => setSort(event.target.value as SortType)}
+                                        sx={{width: '18ch'}}
+                                    >
+                                        <MenuItem value={'alphabetical'}>Alphabetically</MenuItem>
+                                        <MenuItem value={'stack'}>Stack</MenuItem>
+                                        <MenuItem value={'environment'}>Environment</MenuItem>
+                                        <MenuItem value={'tool'}>Tool Type</MenuItem>
+                                        <MenuItem value={'time'}>Time</MenuItem>
+                                        <MenuItem value={'loc'}>Lines of Code</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </ListItem>
+                        </Collapse>
+                        {
+                            sortedIconsDict.headers.length ?
+                            sortedIconsDict.headers.map((head, idx) => (
+                                <>
+                                    {toolsExpanded && <ListSubheader
+                                        key={head}
+                                        sx={{
+                                            backgroundColor: '#282828',
+                                            borderRadius: '2%'
+                                        }}>
+                                        {head}
+                                    </ListSubheader>}
+                                    {sortedIconsDict.groups[idx].map((tool) => {
+                                        return toolItem(tool)
+                                    })}
+                                </>
+                            )) :
+                            sortedIconsDict.groups[0].map((tool) => {
+                                return toolItem(tool)
+                            })
+                        }
+                    </Collapse>
+                </List>
+            </Drawer>}
+        </>
     )
 };
 
