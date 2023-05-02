@@ -58,7 +58,8 @@ const ExperienceCard = (props: ExperienceCardPropsType) => {
     const { exp } = props;
     const [expanded, setExpanded] = React.useState(false);
     const dateOptions: Intl.DateTimeFormatOptions = {month: 'long', year: 'numeric'};
-
+    const theme = useTheme();
+    
     const [styles, api] = useSpring(() => ({
         from: {
             maxHeight: 0,
@@ -111,11 +112,11 @@ const ExperienceCard = (props: ExperienceCardPropsType) => {
                         titleTypographyProps={{variant: 'h6'}}
                         subheaderTypographyProps={{fontStyle: 'italic'}}
                         sx={{
-                            backgroundColor: '#32302F',
+                            backgroundColor: theme.customPalette.lighterHeader,
                         }}
                     />
                     <CardContent sx={{
-                        backgroundColor: "#3C3836",
+                        backgroundColor: theme.customPalette.contentBackground,
                         padding: 0,
                         display: 'grid',
                     }}>
@@ -131,7 +132,9 @@ const ExperienceCard = (props: ExperienceCardPropsType) => {
                             })}
                         </Stack>
                     </CardContent>
-                    <AnimatedCardContent style={styles} sx={{backgroundColor: "#282828"}}>
+                    <AnimatedCardContent style={styles} sx={{
+                        backgroundColor: theme.customPalette.headerBackground
+                    }}>
                         <List sx={{listStyleType: 'disc', pl: 4}}>
                             {exp.bullets.map(bullet => {
                                 return (
@@ -254,7 +257,7 @@ const Home = () => {
                 anchor={'right'}
                 open={true}
                 variant={'permanent'}>
-                <List sx={{backgroundColor: '#3C3836'}}>
+                <List sx={{backgroundColor: theme.customPalette.contentBackground}}>
                     <Collapse
                         key={'Collapser'}
                         orientation={'horizontal'}
@@ -297,7 +300,7 @@ const Home = () => {
                                     {toolsExpanded && <ListSubheader
                                         key={head}
                                         sx={{
-                                            backgroundColor: '#282828',
+                                            backgroundColor: theme.customPalette.headerBackground,
                                             borderRadius: '2%'
                                         }}>
                                         {head}
