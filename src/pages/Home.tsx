@@ -25,6 +25,7 @@ import {
 import { animated, config, useSpring } from '@react-spring/web';
 import * as icon from '../ui/icons';
 import { experiences } from '../assets/text';
+import NavMenu from '../ui/NavMenu';
 
 type SortType = 'alphabetical' | 'stack' | 'environment' | 'tool' | 'time' | 'loc';
 
@@ -246,6 +247,7 @@ const Home = () => {
 
     return (
         <>
+            <NavMenu/>
             <Grid2 container spacing={2}>
                 <Grid2 xs={0} sm={1} md={2}/>
                 <Grid2 xs={12} sm={10} md={8}>
