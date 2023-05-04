@@ -19,13 +19,11 @@ import {
     Select,
     Stack,
     Typography,
-    useMediaQuery,
     useTheme
 } from '@mui/material';
 import { animated, config, useSpring } from '@react-spring/web';
 import * as icon from '../ui/icons';
 import { experiences } from '../assets/text';
-import NavMenu from '../ui/NavMenu';
 
 type SortType = 'alphabetical' | 'stack' | 'environment' | 'tool' | 'time' | 'loc';
 
@@ -185,7 +183,6 @@ const Home = () => {
     };
 
     const theme = useTheme();
-    const mediumUp = useMediaQuery(theme.breakpoints.up('md'));
 
     const sortedIconsDict: {
         headers: string[],
@@ -247,7 +244,6 @@ const Home = () => {
 
     return (
         <>
-            <NavMenu/>
             <Grid2 container spacing={2}>
                 <Grid2 xs={0} sm={1} md={2}/>
                 <Grid2 xs={12} sm={10} md={8}>
@@ -255,9 +251,12 @@ const Home = () => {
                 </Grid2>
                 <Grid2 xs={0} sm={1} md={2}/>
             </Grid2>
-            {mediumUp && <Drawer
+            <Drawer
                 anchor={'right'}
                 open={true}
+                sx={{
+                    display: {xs: 'none', md: 'flex'},
+                }}
                 variant={'permanent'}>
                 <List sx={{backgroundColor: theme.customPalette.contentBackground}}>
                     <Collapse
@@ -266,10 +265,14 @@ const Home = () => {
                         in={toolsExpanded}
                         collapsedSize={72}
                     >
-                        <ListItem key={'header'} sx={{
-                            justifyContent: 'start',
-                            padding: [1, 'auto']
-                        }}>
+                        <ListItem
+                            key={'header'}
+                            onClick={() => setToolsExpanded(!toolsExpanded)}
+                            sx={{
+                                justifyContent: 'start',
+                                padding: [1, 'auto']
+                            }}
+                        >
                             Toolbox
                         </ListItem>
                         <Collapse
@@ -318,7 +321,7 @@ const Home = () => {
                         }
                     </Collapse>
                 </List>
-            </Drawer>}
+            </Drawer>
         </>
     )
 };
