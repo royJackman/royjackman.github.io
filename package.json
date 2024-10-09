@@ -1,74 +1,45 @@
 {
-  "name": "royjackman.github.io",
-  "version": "2.0.0",
+  "name": "roy-jackman-personal-website",
+  "version": "0.0.0",
   "private": true,
-  "dependencies": {
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/joy": "^5.0.0-alpha.75",
-    "@mui/lab": "^5.0.0-alpha.126",
-    "@mui/material": "^5.12.0",
-    "@react-spring/parallax": "^9.7.2",
-    "@react-spring/web": "^9.7.2",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/lodash": "^4.14.194",
-    "@types/luxon": "^3.3.0",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "lodash": "^4.17.21",
-    "luxon": "^3.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-font": "^1.2.1",
-    "react-router-dom": "^6.10.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.4.2",
-    "web-vitals": "^2.1.0"
-  },
+  "type": "module",
   "scripts": {
-    "predeploy": "yarn build",
-    "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint src/**/* --ext .ts"
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "test:unit": "vitest",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build --force",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@lottiefiles/dotlottie-vue": "^0.4.16",
+    "@vueuse/core": "^11.1.0",
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
-    "@typescript-eslint/parser": "^5.59.0",
-    "eslint": "^8.38.0",
-    "eslint-config-prettier": "^8.8.0",
-    "gh-pages": "^5.0.0",
-    "prettier": "^2.8.7"
-  },
-  "description": "My website!",
-  "main": "index.tsx",
-  "repository": "https://github.com/royJackman/royjackman.github.io.git",
-  "author": "jackman.roy@gmail.com",
-  "license": "MIT",
-  "homepage": "https://royJackman.github.io"
+    "@rushstack/eslint-patch": "^1.8.0",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^20.14.5",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.5.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.23.0",
+    "jsdom": "^24.1.0",
+    "npm-run-all2": "^6.2.0",
+    "prettier": "^3.2.5",
+    "sass": "^1.79.4",
+    "sass-loader": "^16.0.2",
+    "typescript": "~5.4.0",
+    "vite": "^5.3.1",
+    "vite-plugin-vue-devtools": "^7.3.1",
+    "vitest": "^1.6.0",
+    "vue-tsc": "^2.0.21"
+  }
 }
