@@ -26,14 +26,7 @@ const ypx = computed(() => `${y.value}px`);
   .header {
     display: flex;
     place-items: center;
-    position: sticky;
     transform: translateY(v-bind(ypx));
-  }
-
-  .header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
   }
 }
 </style>

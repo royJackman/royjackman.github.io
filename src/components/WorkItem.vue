@@ -5,35 +5,21 @@ const isOpen = ref(false)
 </script>
 
 <template>
-    <div class="item">
-        <i @click="isOpen = !isOpen">
-            <slot name="logo"></slot>
-        </i>
-        <div class="content" @click="isOpen = !isOpen">
+    <div class="item" @click="isOpen = !isOpen">
+        <i><slot name="logo"></slot></i>
+        <div class="content">
             <div class="spaced">
-                <h2>
-                    <slot name="position"></slot>
-                </h2>
-                <h2>
-                    <slot name="company"></slot>
-                </h2>
+                <h2><slot name="position"></slot></h2>
+                <h2><slot name="company"></slot></h2>
             </div>
             <div class="spaced">
-                <h3>
-                    <slot name="hook"></slot>
-                </h3>
-                <h3>
-                    <slot name="dates"></slot>
-                </h3>
+                <h3><slot name="hook"></slot></h3>
+                <h3><slot name="dates"></slot></h3>
             </div>
             <Transition name="fade">
                 <div v-if="isOpen">
-                    <ul>
-                        <slot name="bullets"></slot>
-                    </ul>
-                    <div class="tech">
-                        <slot name="technologies"></slot>
-                    </div>
+                    <ul><slot name="bullets"></slot></ul>
+                    <div class="tech"><slot name="technologies"></slot></div>
                 </div>
             </Transition>
         </div>
@@ -84,7 +70,6 @@ const isOpen = ref(false)
     }
 
     .item {
-        margin-top: 2rem;
         display: flex;
         position: relative;
         flex-direction: row;
@@ -109,12 +94,9 @@ const isOpen = ref(false)
 
     @keyframes squeeze {
         0% {
-            transform: scaleY(0);
             height: 0%;
         }
-        50% { transform: scaleY(0.78); }
         100% {
-            transform: scaleY(1);
             height: 100%;
         }
     }
@@ -122,7 +104,7 @@ const isOpen = ref(false)
     @media (min-width: 1024px) {
         .item {
             margin-top: 0;
-            padding: 0.4rem 0 1rem calc(var(--section-gap) / 2);
+            padding: 0.4rem 0 1rem calc(var(--section-gap) / 4);
 
             &:before, &:after {
                 content: ' ';
