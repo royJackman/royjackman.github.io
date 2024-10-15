@@ -1,6 +1,7 @@
 <template>
     <div class="card">
-        <h1>I have not decided what goes here yet.</h1>
+        <h1>This is a placeholder!</h1>
+        <h3>I have not decided what goes here yet.</h3>
         <h4>Enjoy the hover effect</h4>
      </div>
 </template>

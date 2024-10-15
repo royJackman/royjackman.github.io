@@ -12,8 +12,7 @@ defineProps<{
       <h1 class="accent">{{ msg }}</h1>
       <h3>Senior Full Stack Software Engineer</h3>
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/work">Work</RouterLink>
+        <RouterLink to="/">Work</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
