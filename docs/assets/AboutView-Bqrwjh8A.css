@@ -1,0 +1,1 @@
+.about{display:flex;flex-direction:row;align-items:center;justify-content:space-between;margin-top:3rem}.content{margin-right:3rem}h1{font-weight:700}img{max-width:20vw;height:fit-content}p{margin-top:.5rem;text-align:justify}@media (min-width: 1024px){.about{min-height:100vh;margin-top:0rem}}
